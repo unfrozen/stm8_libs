@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_uart.c
  *  Date first: 12/30/2017
- *  Date last:  12/31/2017
+ *  Date last:  01/25/2018
  *
  *  Description: STM8 Library for UART1
  *
@@ -20,14 +20,14 @@
  *  Buffers and counters
  */
 
-char uart_rxbuf[16];
-char uart_txbuf[16];
+static char uart_rxbuf[16];
+static char uart_txbuf[16];
 
 volatile char tx_get, tx_put;
 volatile char rx_get, rx_put;
 
-short	rx_overruns;
-short	buf_overruns;
+static short	rx_overruns;
+static short	buf_overruns;
 
 /******************************************************************************
  *
