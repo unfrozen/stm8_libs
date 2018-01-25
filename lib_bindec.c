@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_bindec.c
  *  Date first: 12/22/2017
- *  Date last:  12/24/2017
+ *  Date last:  01/09/2019
  *
  *  Description: Library of binary/decimal functions for STM8
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -20,13 +20,9 @@
 #define COSMIC
 #endif
 
-char *junk_ptr;
-short junk_short;
-long  junk_long;
-
 /******************************************************************************
  *
- *  Binary to decimal
+ *  Binary to decimal, terminate with zero
  *
  *  in:  binary (16 bits), 5 char buffer
  */
@@ -85,6 +81,7 @@ __asm
     ldw		y, (3, sp)
     ldw		(2, x), y
 
+    clr		(5, x)
     add		sp, #4
 #ifdef SDCC
 __endasm;
@@ -96,7 +93,7 @@ __endasm;
 
 /******************************************************************************
  *
- *  Binary to decimal
+ *  Binary to decimal, terminate with zero
  *
  *  in:  binary (32 bits), 10 char buffer
  */
@@ -180,6 +177,7 @@ __asm
     dec		(1, sp)
     jrne	00005$
 
+    clr		(11, y)
     add		sp, #2
 
 __endasm;
@@ -260,6 +258,7 @@ ascii_loop:
     dec		(1, sp)
     jrne	ascii_loop
 
+    clr		(11, y)
     add		sp, #2
 #endasm
 #endif		/* COSMIC */
@@ -282,4 +281,51 @@ char *decimal_rlz(char *buf, char max)
 	max--;
     }
     return buf;
+}
+
+/******************************************************************************
+ *
+ *  Convert binary byte to hex, terminate with zero
+ *  in: binary, buffer
+ */
+
+void bin8_hex(char val, char *hex)
+{
+#ifdef SDCC
+    val, hex;
+__asm
+    ldw		x, (4, sp)
+    ld		a, (3, sp)
+    swap	a
+    and		a, #0x0f
+    add		a, #6
+    jrh		00001$
+    sub		a, #7
+00001$:
+    add		a, #'0'+1
+    ld		(x), a
+
+    ld		a, (3, sp)
+    and		a, #0x0f
+    add		a, #6
+    jrh		00002$
+    sub		a, #7
+00002$:
+    add		a, #'0'+1
+    ld		(1, x), a
+    clr		(2, x)
+__endasm;
+#else
+    *hex = val >> 4;
+    if (*hex > 9)
+	*hex += 7;
+    *hex += '0';
+    hex++;
+    *hex = val & 0x0f;
+    if (*hex > 9)
+	*hex += 7;
+    *hex += '0';
+    hex++;
+    *hex = 0;
+#endif
 }
