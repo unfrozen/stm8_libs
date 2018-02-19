@@ -4,6 +4,9 @@
 
 #define PTR(addr) *(volatile char *)(addr)
 
+#define EEPROM		PTR(0x4000)
+#define EEPROM_SIZE	640
+
 #define UNIQUE_ID	PTR(0x4865)	// 12-byte unique id
 
 #define PA_ODR		PTR(0x5000)	// Port A output latch
@@ -57,6 +60,8 @@
 #define CLK_PCKENR2	PTR(0x50ca)	// Peripheral clock gating #2
 #define CLK_HSITRIMR	PTR(0x50cc)	// HSI clock calibration trimming
 #define CLK_SWIMCCR	PTR(0x50cd)	// SWIM clock control
+
+#define BEEP_CSR	PTR(0x50f3)	// BEEP control
 
 #define UART1_SR	PTR(0x5230)	// UART2 status
 #define UART1_DR	PTR(0x5231)	// UART2 data
