@@ -3,6 +3,9 @@
 	//
 	#define TRUE 1
 	#define FALSE 0
+
+	#define UNIQUE_ID *(char *)0x4865	// 12-byte unique id
+
 	#define PA_ODR *(unsigned char*)0x005000 // Port A data output latch register
 	#define PA_IDR *(unsigned char*)0x005001 // Port A input pin value register
 	#define PA_DDR *(unsigned char*)0x005002 // Port A data direction register
@@ -311,6 +314,14 @@
 	#define TIMx_CC2IF (1 << 2)
 	#define TIMx_CC1IF (1 << 1)
 	#define TIMx_UIF (1 << 0)
+
+	#define TIMx_CC3G (1 << 3)
+	#define TIMx_CC2G (1 << 2)
+	#define TIMx_CC1G (1 << 1)
+	#define TIMx_UG   (1 << 0)
+	
+	#define TIMx_CC1P (1 << 1)	/* capture polarity */
+	#define TIMx_CC1E (1 << 0)	/* capture enable */
 	
 	// Output Data Register
 	#define Px_ODR7 (1 << 7)
