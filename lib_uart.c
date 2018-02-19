@@ -23,8 +23,8 @@
 static char uart_rxbuf[16];
 static char uart_txbuf[16];
 
-volatile char tx_get, tx_put;
-volatile char rx_get, rx_put;
+static volatile char tx_get, tx_put;
+static volatile char rx_get, rx_put;
 
 static short	rx_overruns;
 static short	buf_overruns;
