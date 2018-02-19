@@ -64,6 +64,8 @@
 #define CLK_HSITRIMR	PTR(0x50cc)	// HSI clock calibration trimming
 #define CLK_SWIMCCR	PTR(0x50cd)	// SWIM clock control
 
+#define BEEP_CSR	PTR(0x50f3)	// Beeper control
+
 #define UART2_SR	PTR(0x5240)	// UART2 status
 #define UART2_DR	PTR(0x5241)	// UART2 data
 #define UART2_BRR1	PTR(0x5242)	// UART2 baud rate #1
