@@ -43,6 +43,9 @@ void uart_init(unsigned short baud)
     rx_overruns = 0;
     buf_overruns = 0;
 
+    PD_DDR |= 0x20;		/* D5 is TX */
+    PD_DDR &= 0xbf;		/* D6 is RX */
+
     UART1_BRR2 = baud & 0xff;	/* write BRR2 first */
     UART1_BRR1 = baud >> 8;
     UART1_CR1  = 0;	/* 8 bits, no parity */
