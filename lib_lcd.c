@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  01/02/2018
+ *  Date last:  01/19/2018
  *
  *  Description: Library for Hitachi LM016L LCD on STM8 architecture.
  *
@@ -26,24 +26,31 @@
 #include "stm8.h"
 #include "lib_lcd.h"
 
-void delay_500ns(void);
-void delay_usecs(char);
-void delay_50us(void);
-void delay_ms(unsigned char);
+static void delay_500ns(void);
+static void delay_usecs(char);
+static void delay_50us(void);
+static void delay_ms(unsigned char);
 
-void lcd_comd(char);
-void lcd_data(char);
-void lcd_nybble(char);
+static void lcd_comd(char);
+static void lcd_data(char);
+static void lcd_nybble(char);
 
 /******************************************************************************
  *
- *  Set LCD cursor position
+ *  Set LCD cursor by line and column
  *
- *  in: position (0x00-0x0f first line, 0x40-0x4f second line
+ *  in: line (0-3), column (0-19)
  */
 
-void lcd_curs(char val)
+void lcd_curs(char line, char col)
 {
+    char	val;
+
+    val = col;
+    if (line & 1)
+	val += 0x40;		/* lines 1 & 3 have 0x40 offset */
+    if (line & 2)
+	val += 20;		/* lines 2 & 3 have 20 offset */
     lcd_comd(val | 0x80);
 }
 
