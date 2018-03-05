@@ -20,6 +20,7 @@
 #define PORT_ODR PD_ODR
 #define PORT_DDR PD_DDR
 #define PORT_CR1 PD_CR1
+#define _PORT_ODR _PD_ODR
 
 #define PIN_CLK	 1
 #define PIN_LOAD 2
@@ -33,8 +34,7 @@ static char led_count;
 static char led_row;		/* line or unit# */
 static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 
-static void emit_byte(char);
-static void emit_load(void);
+static void emit_word(int);
 
 const char segs_digits[];
 const char segs_alpha[];
@@ -56,20 +56,12 @@ void m7219_init(char type, char count)
     led_row = 0;
     led_col = 0;
 
-    emit_byte(0x09);		/* decode mode */
-    emit_byte(0x00);		/* no BCD decode for any digits */
-    emit_load();
-
-    emit_byte(0x0b);		/* scan limit */
-    emit_byte(0x07);		/* scan all digits */
-    emit_load();
-
+    emit_word(0x0900);		/* no BCD decode for any digits */
+    emit_word(0x0b07);		/* scan all digits */
     m7219_bright(15);		/* maximum brightness */
+    emit_word(0x0c01);		/* normal operation */
 
-    emit_byte(0x0c);		/* shutdown mode */
-    emit_byte(0x01);		/* normal operation */
-    emit_load();
-
+    m7219_clear();
 }
 
 /******************************************************************************
@@ -113,6 +105,8 @@ static char code_7seg(char c)
 	return 0;
     if (c == '-')
 	return 1;
+    if (c == '_')
+	return 8;
     if ((c & 0xf0) == 0x30)
 	return segs_digits[c & 0x0f];
     if (c < 'A' ||
@@ -129,18 +123,20 @@ static char code_7seg(char c)
 
 void m7219_putc(char c)
 {
-    char	s;
+    char	pos, segs;
 
     if (led_type == MAX7219_7SEG) {
-	emit_byte(led_col + 1);	/* select led, 1 - 8 as first byte */
-	s = code_7seg(c);
-	s |= (c & 0x80);
-	emit_byte(s);
-	emit_load();
+	segs = code_7seg(c);
+	segs |= (c & 0x80);
+	pos = 8 - led_col;
+	emit_word((pos << 8) | segs);
+
 	led_col++;
 	if (led_col & 8) {
 	    led_col = 0;
 	    led_row++;
+	    if (led_row == led_count)
+		led_row = 0;
 	}
 	return;
     }
@@ -151,50 +147,53 @@ void m7219_putc(char c)
 
 /******************************************************************************
  *
+ *  Clear all displays
+ */
+
+void m7219_clear(void)
+{
+    m7219_curs(0, 0);
+    do
+	m7219_putc(' ');
+    while (led_col | led_row);
+}
+
+/******************************************************************************
+ *
  *  Set LED intensity (and clear test mode)
  *  in:  0 (minimum) to 15 (maximum)
  */
 
 void m7219_bright(char intensity)
 {
-    emit_byte(0x0a);
-    emit_byte(intensity);
-    emit_load();
+    emit_word(0x0a00 | intensity);
 }
 
 /******************************************************************************
  *
- *  Send byte to controller
+ *  Send word to controller
  */
 
-static void emit_byte(char c)
+static void emit_word(int w)
 {
-    c;
+    w;
 __asm
-    push	#8
+    ldw		x, (3, sp)
+    push	#16
 00001$:
-    rlc		a
-    bccm	_PD_ODR, #PIN_DATA
-    bset	_PD_ODR, #PIN_CLK
-    bres	_PD_ODR, #PIN_CLK
+    bres	_PORT_ODR, #PIN_CLK
+    rlcw	x
+    bccm	_PORT_ODR, #PIN_DATA
+    bset	_PORT_ODR, #PIN_CLK
     dec		(1, sp)
     jrne	00001$
 
+    bset	_PORT_ODR, #PIN_LOAD
+    bres	_PORT_ODR, #PIN_CLK
+    bres	_PORT_ODR, #PIN_LOAD
+
     pop		a
-__endasm;	
-}
-
-/******************************************************************************
- *
- *  Send load signal to controller
- */
-
-static void emit_load(void)
-{
-__asm
-    bset	_PD_ODR, #PIN_LOAD
-    bres	_PD_ODR, #PIN_LOAD
-__endasm;	
+__endasm;
 }
 
 /*	 aaa		 666
@@ -207,7 +206,7 @@ __endasm;
  */
 
 const char segs_digits[16] = {
-    0x3e, 0x30, 0x6d, 0x79, 0x33,	/* 0 - 4 */
+    0x7e, 0x30, 0x6d, 0x79, 0x33,	/* 0 - 4 */
     0x5b, 0x5f, 0x70, 0x7f, 0x7b,	/* 5 - 9 */
     SEG_INVALID, SEG_INVALID, SEG_INVALID, SEG_INVALID, SEG_INVALID, SEG_INVALID
 };
@@ -227,10 +226,10 @@ const char segs_alpha[21] = {
     SEG_INVALID,	/* M */
     SEG_INVALID,	/* N */
     0x1d,		/* O (small o) */
-    0x66,		/* P */
+    0x67,		/* P */
     SEG_INVALID,	/* Q */
     SEG_INVALID,	/* R */
     0x5b,		/* S shared with 5 */
-    0x30,		/* T */
+    SEG_INVALID,	/* T */
     0x3e		/* U */
 };

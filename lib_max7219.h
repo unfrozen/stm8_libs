@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.h
  *  Date first: 02/27/2018
- *  Date last:  03/02/2018
+ *  Date last:  03/05/2018
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -42,14 +42,13 @@ void m7219_puts(char *);
 void m7219_curs(char, char);
 
 /*
- *  Set test mode for unit
- *  in: unit# (0-max)
+ *  Clear all displays
  */
 
-void m7219_test(char);
+void m7219_clear(void);
 
 /*
- *  Set LED intensity (and clear test mode)
+ *  Set LED intensity
  *  in: 0 (minimum) to 15 (maximum)
  */
 
