@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  03/02/2018
+ *  Date last:  03/05/2018
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -47,6 +47,7 @@ const char segs_alpha[];
 
 void m7219_init(char type, char count)
 {
+    PORT_ODR &= 0xf1;		/* start pins low */
     PORT_DDR |= 0x0e;		/* D1, D2, D3 outputs */
     PORT_CR1 |= 0x0e;		/* enable source output */
 
@@ -54,6 +55,21 @@ void m7219_init(char type, char count)
     led_count = count;
     led_row = 0;
     led_col = 0;
+
+    emit_byte(0x09);		/* decode mode */
+    emit_byte(0x00);		/* no BCD decode for any digits */
+    emit_load();
+
+    emit_byte(0x0b);		/* scan limit */
+    emit_byte(0x07);		/* scan all digits */
+    emit_load();
+
+    m7219_bright(15);		/* maximum brightness */
+
+    emit_byte(0x0c);		/* shutdown mode */
+    emit_byte(0x01);		/* normal operation */
+    emit_load();
+
 }
 
 /******************************************************************************
@@ -131,6 +147,19 @@ void m7219_putc(char c)
     if (led_type == MAX7219_DOT) {
 
     }
+}
+
+/******************************************************************************
+ *
+ *  Set LED intensity (and clear test mode)
+ *  in:  0 (minimum) to 15 (maximum)
+ */
+
+void m7219_bright(char intensity)
+{
+    emit_byte(0x0a);
+    emit_byte(intensity);
+    emit_load();
 }
 
 /******************************************************************************
