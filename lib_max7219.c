@@ -34,7 +34,8 @@ static char led_count;
 static char led_row;		/* line or unit# */
 static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 
-static void emit_word(int);
+static void emit_word(int);	/* last word in multi-unit command */
+static void emit_midw(int);	/* not last word */
 
 const char segs_digits[];
 const char segs_alpha[];
@@ -47,6 +48,8 @@ const char segs_alpha[];
 
 void m7219_init(char type, char count)
 {
+    char	i;
+
     PORT_ODR &= 0xf1;		/* start pins low */
     PORT_DDR |= 0x0e;		/* D1, D2, D3 outputs */
     PORT_CR1 |= 0x0e;		/* enable source output */
@@ -58,8 +61,11 @@ void m7219_init(char type, char count)
 
     emit_word(0x0900);		/* no BCD decode for any digits */
     emit_word(0x0b07);		/* scan all digits */
-    m7219_bright(15);		/* maximum brightness */
+    m7219_bright(6);		/* brightness */
     emit_word(0x0c01);		/* normal operation */
+
+    for (i = 1; i < count; i++)
+	emit_word(0);		/* nop to push setup commands to all */
 
     m7219_clear();
 }
@@ -124,9 +130,10 @@ static char code_7seg(char c)
 void m7219_putc(char c)
 {
     char	pos, segs;
+    char	i;
 
     if (led_type == MAX7219_7SEG) {
-	segs = code_7seg(c);
+	segs = code_7seg(c & 0x7f);
 	segs |= (c & 0x80);
 	pos = 8 - led_col;
 	emit_word((pos << 8) | segs);
