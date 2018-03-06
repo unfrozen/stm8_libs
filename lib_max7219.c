@@ -34,8 +34,9 @@ static char led_count;
 static char led_row;		/* line or unit# */
 static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 
-static void emit_word(int);	/* last word in multi-unit command */
-static void emit_midw(int);	/* not last word */
+static void emit_word(int);	/* issue command word and load */
+static void emit_part(int);	/* not last word */
+static void emit_load(void);	/* issue load command */
 
 const char segs_digits[];
 const char segs_alpha[];
@@ -136,7 +137,12 @@ void m7219_putc(char c)
 	segs = code_7seg(c & 0x7f);
 	segs |= (c & 0x80);
 	pos = 8 - led_col;
-	emit_word((pos << 8) | segs);
+	for (i = led_count; i > 0; i--)
+	    if (i == led_row + 1)
+		emit_part((pos << 8) | segs);
+	    else
+		emit_part(0);
+	emit_load();
 
 	led_col++;
 	if (led_col & 8) {
@@ -178,10 +184,21 @@ void m7219_bright(char intensity)
 
 /******************************************************************************
  *
- *  Send word to controller
+ *  Send word to controller(s)
  */
 
 static void emit_word(int w)
+{
+    emit_part(w);
+    emit_load();
+}
+
+/******************************************************************************
+ *
+ *  Send one word as part of a chain
+ */
+
+static void emit_part(int w)
 {
     w;
 __asm
@@ -192,14 +209,18 @@ __asm
     rlcw	x
     bccm	_PORT_ODR, #PIN_DATA
     bset	_PORT_ODR, #PIN_CLK
+    bres	_PORT_ODR, #PIN_CLK
     dec		(1, sp)
     jrne	00001$
-
-    bset	_PORT_ODR, #PIN_LOAD
-    bres	_PORT_ODR, #PIN_CLK
-    bres	_PORT_ODR, #PIN_LOAD
-
     pop		a
+__endasm;
+}
+
+static void emit_load(void)
+{
+__asm
+    bset	_PORT_ODR, #PIN_LOAD
+    bres	_PORT_ODR, #PIN_LOAD
 __endasm;
 }
 
