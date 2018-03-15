@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  03/05/2018
+ *  Date last:  03/15/2018
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -16,6 +16,7 @@
 #include "stm8_103.h"		/* C defines */
 #include "stm8_103.inc"		/* asm defines */
 #include "lib_max7219.h"
+#include "lib_max7219.font"
 
 #define PORT_ODR PD_ODR
 #define PORT_DDR PD_DDR
@@ -37,14 +38,27 @@ static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 static void emit_word(int);	/* issue command word and load */
 static void emit_part(int);	/* not last word */
 static void emit_load(void);	/* issue load command */
+static void send_digit(int);	/* send digit/line to display */
+
+static char  code_7seg(char);	/* get 7-segment code for ASCII character */
+static char *code_dots(char);	/* get bitmap for ASCII character */
 
 const char segs_digits[];
 const char segs_alpha[];
 
+#if (MAX7219_DOT) || (MAX7219_GRAPH)
+static void send_grcol(char);	/* send graphic column */
+static void send_graph(void);	/* send 8x8 graphics to unit */
+static void zero_cache(void);	/* clear the graphics cache */
+
+static char graph_cache[8];
+static char graph_pixel;
+#endif
+
 /******************************************************************************
  *
  *  Initialize array
- *  in: type, count
+ *  in: type, device count
  */
 
 void m7219_init(char type, char count)
@@ -69,6 +83,10 @@ void m7219_init(char type, char count)
 	emit_word(0);		/* nop to push setup commands to all */
 
     m7219_clear();
+#if (MAX7219_DOT) || (MAX7219_GRAPH)
+    graph_pixel = 1;
+    zero_cache();
+#endif
 }
 
 /******************************************************************************
@@ -81,6 +99,10 @@ void m7219_curs(char line, char col)
 {
     led_row = line;
     led_col = col;
+#if (MAX7219_DOT) || (MAX7219_GRAPH)
+    graph_pixel = 1;
+    zero_cache();
+#endif
 }
 
 /******************************************************************************
@@ -131,33 +153,159 @@ static char code_7seg(char c)
 void m7219_putc(char c)
 {
     char	pos, segs;
-    char	i;
+    int		offset;
+    char	*bm, bw;	/* char bitmap and width */
 
     if (led_type == MAX7219_7SEG) {
 	segs = code_7seg(c & 0x7f);
 	segs |= (c & 0x80);
 	pos = 8 - led_col;
-	for (i = led_count; i > 0; i--)
-	    if (i == led_row + 1)
-		emit_part((pos << 8) | segs);
-	    else
-		emit_part(0);
-	emit_load();
-
-	led_col++;
-	if (led_col & 8) {
-	    led_col = 0;
-	    led_row++;
-	    if (led_row == led_count)
-		led_row = 0;
-	}
+	send_digit((pos << 8) | segs);
 	return;
     }
+#ifdef MAX7219_DOT
     if (led_type == MAX7219_DOT) {
+	c -= 32;
+	if (c > 95)
+	    c = 95;
+	offset = c * 5;
+	bm = font_map + offset;
+	bw = 5;
+	while (bw--)
+	    send_grcol(*bm++);
+	send_grcol(0);		/* space between chars */
+	send_graph();
+	return;
+    }
+#endif
+#ifdef MAX7219_GRAPH
+    if (led_type == MAX7219_GRAPH) {
+	send_grcol(c);
+	send_graph();
+	return;
+    }
+#endif
+}
 
+/* 7-Segment unit positions: 8 7 6 5 4 3 2 1
+ *
+ * Dot matrix positions for horizontal (row/digit# and bit):
+ *
+ * 8: 0 1 2 3 4 5 6 7
+ * 7: 0 1 2 3 4 5 6 7
+ * 6: 0 1 2 3 4 5 6 7
+ * 5: 0 1 2 3 4 5 6 7
+ * 4: 0 1 2 3 4 5 6 7
+ * 3: 0 1 2 3 4 5 6 7
+ * 2: 0 1 2 3 4 5 6 7
+ * 1: 0 1 2 3 4 5 6 7  <= graph_cache[0]
+ * 
+ ******************************************************************************
+ *
+ *  Send digit or dot column to display
+ *  in: word with digit# and segs/dots
+ */
+
+static void send_digit(int digit)
+{
+    int		i;
+
+    for (i = led_count; i > 0; i--)
+	if (i == led_row + 1)
+	    emit_part(digit);
+	else
+	    emit_part(0);
+    emit_load();
+
+    led_col++;
+    if (led_col & 8) {
+	led_col = 0;
+	led_row++;
+	if (led_row == led_count)
+	    led_row = 0;
     }
 }
 
+#if (MAX7219_DOT) || (MAX7219_GRAPH)
+/******************************************************************************
+ *
+ *  Send graphics column to 8x8 graphics cache
+ *  in 8-bit column
+ */
+
+static void send_grcol(char dots)
+{
+    char	i, mask;
+    char	*cache;
+
+    cache = graph_cache;
+    mask  = ~graph_pixel;
+
+    for (i = 0; i < 8; i++) {
+	*cache &= mask;
+	if (dots & 0x80)
+	    *cache |= graph_pixel;
+	cache++;
+	dots <<= 1;
+    }
+    graph_pixel <<= 1;
+    led_col++;
+    if (led_col & 8) {
+	send_graph();
+	graph_pixel = 1;
+	led_col = 0;
+	led_row++;
+	zero_cache();
+	if (led_row == led_count)
+	    led_row = 0;
+    }
+}
+
+/******************************************************************************
+ *
+ *  Send 8x8 graphics cache to display
+ */
+
+static void send_graph(void)
+{
+    char	 row, i;
+    char	*cache;
+    int		 digit;
+
+    cache = graph_cache;
+    for (row = 1; row <= 8; row++) {
+	digit = *cache++;
+	digit |= row << 8;
+	for (i = led_count; i > 0; i--)
+	    if (i == led_row + 1)
+		emit_part(digit);
+	    else
+		emit_part(0);
+	emit_load();
+    }
+}
+
+/******************************************************************************
+ *
+ *  Clear the graphics cache
+ */
+
+static void zero_cache(void)
+{
+__asm
+    ldw		x, #_graph_cache
+    clr		(x)
+    clr		(1, x)
+    clr		(2, x)
+    clr		(3, x)
+    clr		(4, x)
+    clr		(5, x)
+    clr		(6, x)
+    clr		(7, x)
+__endasm;
+}
+
+#endif	/* (MAX7219_DOT) || (MAX7219_GRAPH) */
 /******************************************************************************
  *
  *  Clear all displays
@@ -215,6 +363,11 @@ __asm
     pop		a
 __endasm;
 }
+
+/******************************************************************************
+ *
+ *  Send load signal
+ */
 
 static void emit_load(void)
 {
