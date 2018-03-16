@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  03/15/2018
+ *  Date last:  03/16/2018
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -23,9 +23,9 @@
 #define PORT_CR1 PD_CR1
 #define _PORT_ODR _PD_ODR
 
-#define PIN_CLK	 1
-#define PIN_LOAD 2
-#define PIN_DATA 3
+#define PIN_CLK	 1		/* D1 is module CLK */
+#define PIN_LOAD 2		/* D2 is module CS/LOAD */
+#define PIN_DATA 3		/* D3 is module DIN */
 
 #define	SEG_INVALID	0x49	/* "invalid", three horizontal bars */
 
@@ -34,6 +34,9 @@ static char led_count;
 
 static char led_row;		/* line or unit# */
 static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
+
+static char opt_wrap;		/* wrap around to first row? */
+static char opt_marquee;	/* begin marquee */
 
 static void emit_word(int);	/* issue command word and load */
 static void emit_part(int);	/* not last word */
@@ -73,6 +76,8 @@ void m7219_init(char type, char count)
     led_count = count;
     led_row = 0;
     led_col = 0;
+    opt_wrap = 1;
+    opt_marquee = 0;
 
     emit_word(0x0900);		/* no BCD decode for any digits */
     emit_word(0x0b07);		/* scan all digits */
@@ -100,7 +105,7 @@ void m7219_curs(char line, char col)
     led_row = line;
     led_col = col;
 #if (MAX7219_DOT) || (MAX7219_GRAPH)
-    graph_pixel = 1;
+    graph_pixel = 1 << col;
     zero_cache();
 #endif
 }
@@ -174,14 +179,16 @@ void m7219_putc(char c)
 	while (bw--)
 	    send_grcol(*bm++);
 	send_grcol(0);		/* space between chars */
-	send_graph();
+	if (led_col)
+	    send_graph();
 	return;
     }
 #endif
 #ifdef MAX7219_GRAPH
     if (led_type == MAX7219_GRAPH) {
 	send_grcol(c);
-	send_graph();
+	if (led_col)
+	    send_graph();
 	return;
     }
 #endif
@@ -222,7 +229,8 @@ static void send_digit(int digit)
 	led_col = 0;
 	led_row++;
 	if (led_row == led_count)
-	    led_row = 0;
+	    if (opt_wrap)
+		led_row = 0;
     }
 }
 
@@ -241,13 +249,14 @@ static void send_grcol(char dots)
     cache = graph_cache;
     mask  = ~graph_pixel;
 
-    for (i = 0; i < 8; i++) {
-	*cache &= mask;
-	if (dots & 0x80)
-	    *cache |= graph_pixel;
-	cache++;
-	dots <<= 1;
-    }
+    if (!opt_marquee)
+	for (i = 0; i < 8; i++) {
+	    *cache &= mask;
+	    if (dots & 0x80)
+		*cache |= graph_pixel;
+	    cache++;
+	    dots <<= 1;
+	}
     graph_pixel <<= 1;
     led_col++;
     if (led_col & 8) {
@@ -256,8 +265,11 @@ static void send_grcol(char dots)
 	led_col = 0;
 	led_row++;
 	zero_cache();
-	if (led_row == led_count)
-	    led_row = 0;
+	if (led_row == led_count) {
+	    if (opt_wrap | opt_marquee)
+		led_row = 0;
+	    opt_marquee = 0;
+	}
     }
 }
 
@@ -316,7 +328,7 @@ void m7219_clear(void)
     m7219_curs(0, 0);
     do
 	m7219_putc(' ');
-    while (led_col | led_row);
+    while (led_col | led_row);	/* fixme: when opt_wrap is off */
 }
 
 /******************************************************************************
@@ -377,7 +389,30 @@ __asm
 __endasm;
 }
 
-/*	 aaa		 666
+/******************************************************************************
+ *
+ *  Set LED options
+ */
+
+void m7219_option(char opt)
+{
+    switch (opt) {
+    case MAX7219_WRAP :
+	opt_wrap = 1;
+	break;
+    case MAX7219_NOWRAP :
+	opt_wrap = 0;
+	break;
+    case MAX7219_MARQUEE :
+	opt_marquee = 1;
+	break;
+    }
+
+}
+
+/******************************************************************************
+ *
+ *	 aaa		 666
  *	f   b		1   5
  *	f   b		1   5
  *	 ggg		 000

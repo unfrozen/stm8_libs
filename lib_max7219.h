@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.h
  *  Date first: 02/27/2018
- *  Date last:  03/15/2018
+ *  Date last:  03/16/2018
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -60,3 +60,13 @@ void m7219_clear(void);
  */
 
 void m7219_bright(char);
+
+/*
+ *  Set LED options
+ */
+
+void m7219_option(char);
+
+#define MAX7219_WRAP	1	/* wrap around to first row & column */
+#define MAX7219_NOWRAP	2	/* don't wrap, ignore extra data */
+#define MAX7219_MARQUEE	3	/* begin marquee: don't show until wrap */
