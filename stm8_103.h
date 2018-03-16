@@ -1,6 +1,7 @@
 /*
  * Header for STM8S 103
  */
+#define STM8103
 
 #define PTR(addr) *(volatile char *)(addr)
 
