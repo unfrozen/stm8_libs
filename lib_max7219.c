@@ -365,12 +365,11 @@ __asm
     ldw		x, (3, sp)
     push	#16
 00001$:
-    bres	_PORT_ODR, #PIN_CLK
     rlcw	x
     bccm	_PORT_ODR, #PIN_DATA
+    dec		(1, sp)
     bset	_PORT_ODR, #PIN_CLK
     bres	_PORT_ODR, #PIN_CLK
-    dec		(1, sp)
     jrne	00001$
     pop		a
 __endasm;
