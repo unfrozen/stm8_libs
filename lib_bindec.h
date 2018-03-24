@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_bindec.h
  *  Date first: 12/24/2017
- *  Date last:  01/09/2018
+ *  Date last:  03/23/2018
  *
  *  Description: Library of binary/decimal functions for STM8
  *
@@ -36,3 +36,10 @@ char *decimal_rlz(char *, char);
  */
 
 void bin8_hex(char, char *);
+
+/*
+ *  Convert ASCII decimal digits to 16-bit binary
+ *  Stops on first non-decimal character
+ */
+
+int dec_bin16(char *);

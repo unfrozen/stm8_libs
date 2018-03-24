@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_bindec.c
  *  Date first: 12/22/2017
- *  Date last:  01/09/2019
+ *  Date last:  03/23/2019
  *
  *  Description: Library of binary/decimal functions for STM8
  *
@@ -329,3 +329,43 @@ __endasm;
     *hex = 0;
 #endif
 }
+
+/******************************************************************************
+ *
+ *  Convert ASCII decimal digits to 16-bit binary
+ *  Stops on first non-decimal character
+ */
+
+int dec_bin16(char *dec)
+{
+    dec;
+__asm
+    ldw		y, (3, sp)
+    clrw	x
+    pushw	x
+00001$:
+    ld		a, (y)
+    incw	y
+    sub		a, #'0'
+    jrc		00090$
+    cp		a, #10
+    jrnc	00090$
+
+    ldw		x, (1, sp)
+    sllw	x
+    sllw	x
+    addw	x, (1, sp)
+    sllw	x
+    ldw		(1, sp), x
+
+    add		a, (2, sp)
+    ld		(2, sp), a
+    jrnc	00001$
+    inc		(1, sp)
+    jra		00001$
+00090$:
+    ldw		x, (1, sp)
+    add		sp, #2
+__endasm;
+}
+
