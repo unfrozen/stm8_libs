@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_uart.h
  *  Date first: 12/30/2017
- *  Date last:  12/31/2017
+ *  Date last:  03/23/2018
  *
  *  Description: STM8 Library for UART1
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -45,6 +45,11 @@ void uart_put(char);
  *  Send string (ending with binary 00)
  */
 void uart_puts(char *);
+
+/*
+ *  Send CR/LF (0x0d 0x0a)
+ */
+void uart_crlf(void);
 
 /*
  *  Get hardware and buffer RX overruns

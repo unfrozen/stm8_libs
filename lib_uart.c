@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_uart.c
  *  Date first: 12/30/2017
- *  Date last:  01/25/2018
+ *  Date last:  03/23/2018
  *
  *  Description: STM8 Library for UART1
  *
@@ -111,6 +111,16 @@ void uart_puts(char *str)
 {
     while (*str)
 	uart_put(*str++);
+}
+
+/******************************************************************************
+ *
+ *  Send CR/LF
+ */
+void uart_crlf(void)
+{
+    uart_put(0x0d);
+    uart_put(0x0a);
 }
 
 /******************************************************************************
