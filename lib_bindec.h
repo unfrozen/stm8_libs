@@ -24,6 +24,12 @@ void bin16_dec(short, char *);
 void bin32_dec(long, char *);
 
 /*
+ *  Convert 8 bit unsigned binary to 2 digit decimal, terminate with zero
+ */
+
+void bin8_dec2(char, char *);
+
+/*
  *  Trim leading zeroes from decimal buffer
  *  in:  buffer, maximum zeroes to remove
  *  out: first non-zero digit

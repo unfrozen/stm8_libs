@@ -285,6 +285,36 @@ char *decimal_rlz(char *buf, char max)
 
 /******************************************************************************
  *
+ *  Convert 8 bit unsigned binary to 2 digit decimal, terminate with zero
+ */
+
+void bin8_dec2(char bin, char *dec)
+{
+    bin, dec;
+__asm
+    clrw	x
+    ld		a, (3, sp)
+    ldw		y, (4, sp)
+    ld		xl, a
+
+    ld		a, #100
+    div		x, a
+    exg		a, xl
+
+    ld		a, #10
+    div		x, a
+    or		a, #'0'
+    ld		(1, y), a
+    exg		a, xl
+    or		a, #'0'
+    ld		(y), a
+
+    clr		(2, y)
+__endasm;
+}
+
+/******************************************************************************
+ *
  *  Convert binary byte to hex, terminate with zero
  *  in: binary, buffer
  */
