@@ -343,13 +343,13 @@ __asm
     ldw		x, (3, sp)
     ldw		y, (5, sp)
 00001$:
-    ld		a, (x)
+    ld		a, (y)
     jreq	00090$
-    incw	x
-    call	_tolower
-    sub		a, (y)
-    jrne	00090$
     incw	y
+    call	_tolower
+    sub		a, (x)
+    jrne	00090$
+    incw	x
     jra		00001$
 00090$:
 __endasm;
