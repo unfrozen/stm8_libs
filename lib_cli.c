@@ -116,6 +116,33 @@ char cli_keynum(char *str)
 
 /******************************************************************************
  *
+ *  Show available commands
+ */
+
+static void puts(char *str)
+{
+    while (*str)
+	putc(*str++);
+}
+
+void cli_help(void)
+{
+    COMMAND_TAB *tab;
+
+    tab = command_tab;
+    while (tab->cmd_num) {
+	puts(tab->cmd_name);
+	putc(9);
+	puts(tab->cmd_info);
+	putc(0x0d);
+	putc(0x0a);
+
+	tab++;
+    }
+}
+
+/******************************************************************************
+ *
  *  Reset command line
  */
 

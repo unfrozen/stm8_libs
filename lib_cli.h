@@ -86,3 +86,9 @@ char cli_trim(char *);
  */
 
 char cli_tokenize(char *, char **, char);
+
+/*
+ *  Print available commands
+ */
+
+void cli_help(void);

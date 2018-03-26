@@ -5,6 +5,9 @@
 
 #define PTR(addr) *(volatile char *)(addr)
 
+#define EEPROM		PTR(0x4000)
+#define EEPROM_SIZE	1024
+
 #define UNIQUE_ID	PTR(0x4865)	// 12-byte unique id
 
 #define PA_ODR		PTR(0x5000)	// Port A output latch
