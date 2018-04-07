@@ -20,13 +20,13 @@
 #define IRQ_TIM1C	12	/* 0x8038 TIM1 capture/compare */
 #define IRQ_TIM2	13	/* 0x803c TIM2 update/overflow */
 #define IRQ_TIM2C	14	/* 0x8040 TIM2 capture/compare */
-#define IRQ_res15	15	/* 0x8044 reserved */
-#define IRQ_res16	16	/* 0x8048 reserved */
+#define IRQ_TIM3	15	/* 0x8044 TIM3 update/overflow */
+#define IRQ_TIM3C	16	/* 0x8048 TIM3 capture/compare */
 #define IRQ_UART_TX	17	/* 0x804c UART TX complete */
 #define IRQ_UART_RX	18	/* 0x8050 UART RX data full */
 #define IRQ_I2C		19	/* 0x8054 I2C interrupt */
-#define IRQ_res20	20	/* 0x8058 reserved */
-#define IRQ_res21	21	/* 0x805c reserved */
+#define IRQ_UART2_TX	20	/* 0x8058 UART2 TX complete */
+#define IRQ_UART2_RX	21	/* 0x805c UART2 RX data full */
 #define IRQ_ADC1	22	/* 0x8060 ADC1 end of conversion/ analog WD */
 #define IRQ_TIM4	23	/* 0x8064 TIM4 update/overflow */
 #define IRQ_FLASH	24	/* 0x8068 EOP / WR_PG_DIS */
