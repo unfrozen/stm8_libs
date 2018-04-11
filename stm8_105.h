@@ -57,7 +57,7 @@
 #define FLASH_NCR2	PTR(0x505c)     // Flash control 2 complement
 #define FLASH_FPR	PTR(0x505d)     // Flash protection
 #define FLASH_NFPR	PTR(0x505e)     // Flash protection complement
-#define FLASH_IAPSR	PTR(0x505f)     // Flash control 1
+#define FLASH_IAPSR	PTR(0x505f)     // Flash in-application program status
 #define FLASH_PUKR	PTR(0x5062)     // Flash unprotect
 #define FLASH_DUKR	PTR(0x5064)     // Data EEPROM unprotect
 
@@ -77,7 +77,7 @@
 #define CLK_HSITRIMR	PTR(0x50cc)	// HSI clock calibration trimming
 #define CLK_SWIMCCR	PTR(0x50cd)	// SWIM clock control
 
-#define BEEP_CSR	PTR(0x50f3)	// Beeper control
+#define BEEP_CSR	PTR(0x50f3)	// BEEP control
 
 #define UART2_SR	PTR(0x5240)	// UART2 status
 #define UART2_DR	PTR(0x5241)	// UART2 data
@@ -92,6 +92,27 @@
 #define UART2_GTR	PTR(0x524a)	// UART2 guard time
 #define UART2_PSCR	PTR(0x524b)	// UART2 prescaler
 
+#define TIM2_CR1        PTR(0x5300)     // TIM2 Control 1
+#define TIM2_IER        PTR(0x5301)     // TIM2 Interrupt enable
+#define TIM2_SR1        PTR(0x5302)     // TIM2 Status 1
+#define TIM2_SR2        PTR(0x5303)     // TIM2 Status 2
+#define TIM2_EGR        PTR(0x5304)     // TIM2 Event generation
+#define TIM2_CCMR1      PTR(0x5305)     // TIM2 cap/comp mode 1
+#define TIM2_CCMR2      PTR(0x5306)     // TIM2 cap/comp mode 2
+#define TIM2_CCMR3      PTR(0x5307)     // TIM2 cap/comp mode 3
+#define TIM2_CCER1      PTR(0x5308)     // TIM2 cap/comp enable 1
+#define TIM2_CCER2      PTR(0x5309)     // TIM2 cap/comp enable 2
+#define TIM2_CNTRH      PTR(0x530a)     // TIM2 counter high
+#define TIM2_CNTRL      PTR(0x530b)     // TIM2 counter low
+#define TIM2_PSCR       PTR(0x530c)     // TIM2 prescaler
+#define TIM2_ARRH       PTR(0x530d)     // TIM2 auto-reload high
+#define TIM2_ARRL       PTR(0x530e)     // TIM2 auto-reload low
+#define TIM2_CCR1H      PTR(0x530f)     // TIM2 cap/comp 1 high
+#define TIM2_CCR1L      PTR(0x5310)     // TIM2 cap/comp 1 low
+#define TIM2_CCR2H      PTR(0x5311)     // TIM2 cap/comp 2 high
+#define TIM2_CCR2L      PTR(0x5312)     // TIM2 cap/comp 2 low
+#define TIM2_CCR3H      PTR(0x5313)     // TIM2 cap/comp 3 high
+#define TIM2_CCR3L      PTR(0x5314)     // TIM2 cap/comp 3 low
 
 #define TIM4_CR1	PTR(0x5340)	// TIM4 control 1
 #define TIM4_IER	PTR(0x5341)	// TIM4 interrupt enable

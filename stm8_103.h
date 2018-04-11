@@ -51,8 +51,8 @@
 #define FLASH_NCR2	PTR(0x505c)	// Flash control 2 complement
 #define FLASH_FPR	PTR(0x505d)	// Flash protection
 #define FLASH_NFPR	PTR(0x505e)	// Flash protection complement
-#define FLASH_IAPSR	PTR(0x505f)	// Flash control 1
-#define FLASH_PUKR	PTR(0x5062)	// Flash in-application program status
+#define FLASH_IAPSR	PTR(0x505f)	// Flash in-application program status
+#define FLASH_PUKR	PTR(0x5062)	// Flash unprotect
 #define FLASH_DUKR	PTR(0x5064)	// Data EEPROM unprotect
 
 #define EXTI_CR1	PTR(0x50a0)	// External interrupt control
