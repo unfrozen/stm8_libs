@@ -3,7 +3,8 @@ SDCC = sdcc -mstm8
 SDAR = sdar
 NAME = lib_stm8
 OBJS = lib_bindec.rel lib_rotary.rel lib_uart.rel lib_lcd.rel\
-	aes_stm8.rel lib_cap2.rel lib_max7219.rel lib_cli.rel
+	aes_stm8.rel lib_cap2.rel lib_max7219.rel lib_cli.rel\
+	lib_clock.rel lib_log.rel
 
 .SUFFIXES : .rel .c
 
