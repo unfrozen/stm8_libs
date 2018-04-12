@@ -399,3 +399,17 @@ __asm
 __endasm;
 }
 
+/******************************************************************************
+ *
+ *  Convert ASCII decimal digits to 16-bit binary
+ *  Digits may be preceded with sign
+ *  Stops on first non-decimal character
+ */
+int dec_bin16s(char *dec)
+{
+    if (*dec == '-')
+	return -dec_bin16(dec + 1);
+    if (*dec == '+')
+	dec++;
+    return dec_bin16(dec);
+}

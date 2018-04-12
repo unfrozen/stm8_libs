@@ -49,3 +49,10 @@ void bin8_hex(char, char *);
  */
 
 int dec_bin16(char *);
+
+/*
+ *  Convert ASCII decimal digits to 16-bit binary
+ *  Digits may be preceded with sign
+ *  Stops on first non-decimal character
+ */
+int dec_bin16s(char *);
