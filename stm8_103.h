@@ -1,7 +1,9 @@
 /*
  * Header for STM8S 103
  */
+#ifndef STM8103
 #define STM8103
+#endif
 
 #define PTR(addr) *(volatile char *)(addr)
 
@@ -84,6 +86,9 @@
 #define UART1_CR5	PTR(0x5238)	// UART2 control #5
 #define UART1_GTR	PTR(0x5239)	// UART2 guard time
 #define UART1_PSCR	PTR(0x523a)	// UART2 prescaler
+
+#define SR_OR		(1 << 3)
+#define SR_TXE		(1 << 7)
 
 #define TIM2_CR1	PTR(0x5300)	// TIM2 Control 1
 #define TIM2_IER	PTR(0x5303)	// TIM2 Interrupt enable

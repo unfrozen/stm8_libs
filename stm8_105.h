@@ -1,14 +1,16 @@
 /*
  * Header for STM8S 105
  */
+#ifndef STM8105
 #define STM8105
+#endif
 
 #define PTR(addr) *(volatile char *)(addr)
 
 #define EEPROM		PTR(0x4000)
 #define EEPROM_SIZE	1024
 
-#define UNIQUE_ID	PTR(0x4865)	// 12-byte unique id
+#define UNIQUE_ID	PTR(0x48cd)	// 12-byte unique id
 
 #define PA_ODR		PTR(0x5000)	// Port A output latch
 #define PA_IDR		PTR(0x5001)	// Port A input status
@@ -91,6 +93,9 @@
 #define UART2_CR6	PTR(0x5249)	// UART2 control #6
 #define UART2_GTR	PTR(0x524a)	// UART2 guard time
 #define UART2_PSCR	PTR(0x524b)	// UART2 prescaler
+
+#define SR_OR		(1 << 3)
+#define SR_TXE		(1 << 7)
 
 #define TIM2_CR1        PTR(0x5300)     // TIM2 Control 1
 #define TIM2_IER        PTR(0x5301)     // TIM2 Interrupt enable
