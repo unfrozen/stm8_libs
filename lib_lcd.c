@@ -1,9 +1,9 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  01/19/2018
+ *  Date last:  04/12/2018
  *
- *  Description: Library for Hitachi LM016L LCD on STM8 architecture.
+ *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
  *  Author:     Richard Hodges
  *
@@ -43,6 +43,7 @@ static void lcd_nybble(char);
 #ifdef STM8105
 #define ENABLE_1	PF_ODR = 0x10
 #define ENABLE_0	PF_ODR = 0x00
+#warning "Pins C1 & C2 clobbered. Use as inputs."
 #endif
 
 /******************************************************************************
