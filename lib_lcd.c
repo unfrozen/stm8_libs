@@ -41,8 +41,8 @@ static void lcd_nybble(char);
 #define ENABLE_0	PA_ODR &= 0xf7
 #endif
 #ifdef STM8105
-#define ENABLE_1	PF_ODR = 0x10
-#define ENABLE_0	PF_ODR = 0x00
+#define ENABLE_1	PF_ODR |= 0x10
+#define ENABLE_0	PF_ODR &= 0xef
 #warning "Pins C1 & C2 clobbered. Use as inputs."
 #endif
 
