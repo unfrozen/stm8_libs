@@ -1,9 +1,9 @@
 /*
  *  File name:  lib_uart.c
  *  Date first: 12/30/2017
- *  Date last:  03/23/2018
+ *  Date last:  04/11/2018
  *
- *  Description: STM8 Library for UART1
+ *  Description: STM8 Library for UART1 and UART2
  *
  *  Author:     Richard Hodges
  *
@@ -13,8 +13,9 @@
  ******************************************************************************
  *
  */
-#include "stm8.h"
-#include "vectors.h"
+#include "stm8s_header.h"
+
+#include "lib_uart.h"
 
 /*
  *  Buffers and counters
@@ -46,13 +47,13 @@ void uart_init(unsigned short baud)
     PD_DDR |= 0x20;		/* D5 is TX */
     PD_DDR &= 0xbf;		/* D6 is RX */
 
-    UART1_BRR2 = baud & 0xff;	/* write BRR2 first */
-    UART1_BRR1 = baud >> 8;
-    UART1_CR1  = 0;	/* 8 bits, no parity */
-    UART1_CR2  = 0x2c;	/* enable RX, TX, RX interrupts only */
-    UART1_CR3  = 0;	/* one stop bit, no synchronous */
-    UART1_CR4  = 0;	/* not using LIN */
-    UART1_CR5  = 0;	/* no smartcard, no IRDA */
+    UART_BRR2 = baud & 0xff;	/* write BRR2 first */
+    UART_BRR1 = baud >> 8;
+    UART_CR1  = 0;	/* 8 bits, no parity */
+    UART_CR2  = 0x2c;	/* enable RX, TX, RX interrupts only */
+    UART_CR3  = 0;	/* one stop bit, no synchronous */
+    UART_CR4  = 0;	/* not using LIN */
+    UART_CR5  = 0;	/* no smartcard, no IRDA */
 }
 
 /******************************************************************************
@@ -99,7 +100,7 @@ void uart_put(char byte)
     while (tx_get == new_ptr);
     uart_txbuf[tx_put] = byte;
     tx_put = new_ptr;
-    UART1_CR2 |= SR_TXE;
+    UART_CR2 |= SR_TXE;
 }
 
 /******************************************************************************
@@ -143,13 +144,13 @@ short uart_over_buf(void)
 void uart_tx_isr(void) __interrupt (IRQ_UART_TX)
 {
     if (tx_get == tx_put) {	/* empty buffer? */
-	UART1_CR2 &= ~SR_TXE;
+	UART_CR2 &= ~SR_TXE;
 	return;
     }
-    UART1_DR = uart_txbuf[tx_get];
+    UART_DR = uart_txbuf[tx_get];
     tx_get = (tx_get + 1) & 0x0f;
     if (tx_get == tx_put)
-	UART1_CR2 &= ~SR_TXE;
+	UART_CR2 &= ~SR_TXE;
 }
 
 /******************************************************************************
@@ -160,9 +161,9 @@ void uart_rx_isr(void) __interrupt (IRQ_UART_RX)
 {
     char	rxbyte, new_ptr;
 
-    if (UART1_SR & SR_OR)
+    if (UART_SR & SR_OR)
 	rx_overruns++;
-    rxbyte = UART1_DR;
+    rxbyte = UART_DR;
     uart_rxbuf[rx_put] = rxbyte;
 
     new_ptr = (rx_put + 1) & 0x0f;
