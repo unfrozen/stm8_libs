@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.c
  *  Date first: 03/23/2018
- *  Date last:  04/11/2018
+ *  Date last:  04/12/2018
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -19,12 +19,14 @@
 #include "lib_bindec.h"
 #include "lib_clock.h"
 
-static char clock_ms;		/* milliseconds */
+static signed char clock_ms;	/* milliseconds, may be negative with trim */
 static char clock_tenths;	/* clock tenths: 0-9 */
 static char clock_secs;		/* clock seconds: 0-59 */
 static char clock_mins;		/* clock minutes: 0-59 */
 static char clock_hours;	/* clock hours:   0-23 */
 static char clock_days;		/* clock days:   0-255 */
+
+static signed char trim_second;	/* small trim every second */
 
 static volatile char clock_lock;	/* lock to update clock */
 
@@ -49,6 +51,8 @@ void clock_init(void (*call_ms)(void), void (*call_10)(void))
     clock_hours  = 0;
     clock_days   = 0;
     clock_lock   = 0;
+
+    trim_second = 0;		/* millisecond trim every second */
 
 #ifdef STM8103
     TIM4_PSCR = 6;	/* prescaler = 64 for 16mhz */
@@ -134,6 +138,18 @@ char clock_set(char *time)
 
 /******************************************************************************
  *
+ *  Set large and fine clock trim
+ *  in: large +/- (0.4%), fine +/- (0.1%)
+ */
+
+void clock_trim(signed char large, signed char fine)
+{
+    TIM4_ARR = 249 - large;
+    trim_second = fine;
+}
+
+/******************************************************************************
+ *
  *  Timer 4 interrupt
  */
 
@@ -155,6 +171,7 @@ void timer4_isr(void) __interrupt (IRQ_TIM4)
 	return;
     clock_tenths = 0;
 
+    clock_ms += trim_second;
     clock_secs++;
     if (clock_secs < 60)
 	return;
