@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.c
  *  Date first: 03/23/2018
- *  Date last:  03/27/2018
+ *  Date last:  04/11/2018
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -14,8 +14,7 @@
  *
  */
 
-#include "stm8_103.h"
-#include "vectors.h"
+#include "stm8s_header.h"
 
 #include "lib_bindec.h"
 #include "lib_clock.h"
@@ -51,8 +50,13 @@ void clock_init(void (*call_ms)(void), void (*call_10)(void))
     clock_days   = 0;
     clock_lock   = 0;
 
-    TIM4_PSCR = 6;	/* prescaler = 64 */
-    TIM4_ARR  = 247;	/* reset and interrupt every 1.0 ms (TRIM: add 2) */
+#ifdef STM8103
+    TIM4_PSCR = 6;	/* prescaler = 64 for 16mhz */
+#endif
+#ifdef STM8105
+    TIM4_PSCR = 5;	/* prescaler = 32 for 8mhz */
+#endif
+    TIM4_ARR  = 249;	/* reset and interrupt every 1.0 ms */
     TIM4_CR1  = 1;	/* enable timer4 */
     TIM4_IER  = 1;	/* enable timer4 interrupt */
 }
@@ -152,7 +156,6 @@ void timer4_isr(void) __interrupt (IRQ_TIM4)
     clock_tenths = 0;
 
     clock_secs++;
-//    clock_ms--;			/* TRIM: subtract 0.1% for this chip */
     if (clock_secs < 60)
 	return;
     clock_secs = 0;

@@ -16,7 +16,8 @@
  *
  *  C4..C7	LCD D4..D7 (pins 11-14)
  *  C3		LCD RS (pin 4)
- *  A3		LCD Enable (pin 6)
+ *  A3		LCD Enable (pin 6) >> STM8S_103
+ *  F4		LCD Enable (pin 6) >> STM8S_105
  *  Vss		LCD ground (pin 1)
  *  Vdd		LCD +5V (pin 2)
  *  Vo		LCD contrast (pin 3)
@@ -34,6 +35,15 @@ static void delay_ms(unsigned char);
 static void lcd_comd(char);
 static void lcd_data(char);
 static void lcd_nybble(char);
+
+#ifdef STM8103
+#define ENABLE_1	PA_ODR |= 0x08
+#define ENABLE_0	PA_ODR &= 0xf7
+#endif
+#ifdef STM8105
+#define ENABLE_1	PF_ODR = 0x10
+#define ENABLE_0	PF_ODR = 0x00
+#endif
 
 /******************************************************************************
  *
@@ -63,16 +73,16 @@ void lcd_put(char val)
 {
     PC_ODR = val | 8;		/* RS=1 for data */
     delay_500ns();
-    PA_ODR |= 0x08;
+    ENABLE_1;
     delay_500ns();
-    PA_ODR &= 0xf7;
+    ENABLE_0;
     delay_500ns();
 
     PC_ODR = (val << 4) | 8;
     delay_500ns();
-    PA_ODR |= 0x08;
+    ENABLE_1;
     delay_500ns();
-    PA_ODR &= 0xf7;
+    ENABLE_0;
     delay_usecs(500);
 }
 
@@ -107,9 +117,9 @@ void lcd_nybble(char val)
 {
     PC_ODR = val & 0xf0;	/* RS=0 for command */
     delay_500ns();
-    PA_ODR |= 8;
+    ENABLE_1;
     delay_500ns();
-    PA_ODR &= 0xf7;
+    ENABLE_0;
     delay_500ns();
 }
 
@@ -123,11 +133,16 @@ void lcd_init(void)
     PC_DDR |= 0xf8;		/* C3, C4-C7 outputs */
     PC_CR1 |= 0xf8;
     PC_CR2 |= 0xf8;		/* fast outputs */
-
+#ifdef STM8103
     PA_DDR |= 0x08;		/* A3 output */
     PA_CR1 |= 0x08;
     PA_CR2 |= 0x08;
-
+#endif
+#ifdef STM8105
+    PF_DDR = 0x10;
+    PF_CR1 = 0x10;
+    PF_CR2 = 0x10;
+#endif
     delay_ms(50);
     lcd_nybble(0x30);		/* start with 8-bit mode */
     delay_ms(5);		/* more than 4.1 ms */
