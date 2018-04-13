@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  04/12/2018
+ *  Date last:  04/13/2018
  *
  *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
@@ -14,17 +14,17 @@
  *
  *  Pinouts:
  *
- *  C4..C7	LCD D4..D7 (pins 11-14)
- *  C3		LCD RS (pin 4)
- *  A3		LCD Enable (pin 6) >> STM8S_103
- *  F4		LCD Enable (pin 6) >> STM8S_105
+ *  C4..C7	LCD D4..D7 (pins 11-14, fast)
+ *  C3		LCD Enable (pin 6, fast)
+ *  A3		LCD RS (pin 4) on STM8S_103 (fast pin)
+ *  F4		LCD RS (pin 4) on STM8S_105 (slow pin)
  *  Vss		LCD ground (pin 1)
  *  Vdd		LCD +5V (pin 2)
  *  Vo		LCD contrast (pin 3)
  *  W*		LCD R/W wired low (pin 5)
  */
 
-#include "stm8.h"
+#include "stm8s_header.h"
 #include "lib_lcd.h"
 
 static void delay_500ns(void);
@@ -37,14 +37,18 @@ static void lcd_data(char);
 static void lcd_nybble(char);
 
 #ifdef STM8103
-#define ENABLE_1	PA_ODR |= 0x08
-#define ENABLE_0	PA_ODR &= 0xf7
+#define BUSY_COUNT	100	/* RC clock at 16mhz */
+#define RS_PORT		_PA_ODR
+#define RS_PIN		3
 #endif
 #ifdef STM8105
-#define ENABLE_1	PF_ODR |= 0x10
-#define ENABLE_0	PF_ODR &= 0xef
+#define RS_PORT		_PF_ODR
+#define RS_PIN		4
 #warning "Pins C1 & C2 clobbered. Use as inputs."
+#define BUSY_COUNT	50	/* crystal oscillator at 8 mhz */
 #endif
+
+char	busy_count = BUSY_COUNT;	/* 100 uSecs */
 
 /******************************************************************************
  *
@@ -72,19 +76,29 @@ void lcd_curs(char line, char col)
 
 void lcd_put(char val)
 {
-    PC_ODR = val | 8;		/* RS=1 for data */
-    delay_500ns();
-    ENABLE_1;
-    delay_500ns();
-    ENABLE_0;
-    delay_500ns();
+    val;
+__asm
+    bset	RS_PORT, #RS_PIN
+    push	_busy_count
 
-    PC_ODR = (val << 4) | 8;
-    delay_500ns();
-    ENABLE_1;
-    delay_500ns();
-    ENABLE_0;
-    delay_usecs(500);
+    ld		a, (4, sp)
+    and		a, #0xf0
+    ld		_PC_ODR, a
+    bset	_PC_ODR, #3
+    call	_delay_500ns
+    bres	_PC_ODR, #3
+
+    ld		a, (4, sp)
+    swap	a
+    and		a, #0xf0
+    ld		_PC_ODR, a
+    bset	_PC_ODR, #3
+    call	_delay_500ns
+    bres	_PC_ODR, #3
+
+    call	_delay_usecs
+    pop		a
+__endasm;
 }
 
 void lcd_puts(char *s)
@@ -116,12 +130,17 @@ void lcd_comd(char val)
 
 void lcd_nybble(char val)
 {
-    PC_ODR = val & 0xf0;	/* RS=0 for command */
-    delay_500ns();
-    ENABLE_1;
-    delay_500ns();
-    ENABLE_0;
-    delay_500ns();
+    val;
+__asm
+    bres	RS_PORT, #RS_PIN
+    ld		a, (3, sp)
+    and		a, #0xf0
+    ld		_PC_ODR, a
+    call	_delay_500ns
+    bset	_PC_ODR, #3
+    call	_delay_500ns
+    bres	_PC_ODR, #3
+__endasm;
 }
 
 /******************************************************************************
@@ -171,15 +190,15 @@ void delay_usecs(char usecs)
 {
     usecs;
 __asm
+        ld	a, (3, sp)
 	dec	a
 	clrw	x
 	ld	xl,a
 	sllw	x
 	sllw	x
 00001$:
-	nop
-	decw	x
-	jrne	00001$
+        decw	x		; (2)
+	jrne	00001$		; (2)
 __endasm;
 }
 
