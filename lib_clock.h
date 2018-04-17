@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.h
  *  Date first: 03/23/2018
- *  Date last:  04/12/2018
+ *  Date last:  04/14/2018
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -46,6 +46,11 @@ void clock_binary(char *);
  */
 
 void clock_trim(signed char, signed char);
+
+/*  DEBUGGING: Expose the clock trim values  */
+
+static signed char	trim_large;
+static signed char	trim_fine;
 
 /*
  *  Interrupt service routine declaration
