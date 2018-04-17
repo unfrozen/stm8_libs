@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.h
  *  Date first: 03/26/2018
- *  Date last:  03/27/2018
+ *  Date last:  04/16/2018
  *
  *  Description: Library for maintaining a many entry system log
  *
@@ -27,6 +27,7 @@ typedef struct {
 #define LOG_DEVON	2
 #define LOG_DEVOFF	3
 #define LOG_TIMESET	4
+#define LOG_NEWDAY	5
 
 /*
  *  Initialize the log library
@@ -58,3 +59,23 @@ char log_write(char);
  */
 
 void log_scan(void (*callback)(LOG_ENTRY *));
+
+/*
+ *  Unlock the EEPROM for writing
+ * out: zero = fail
+ */
+
+char eeprom_unlock(void);
+
+/*
+ *  Lock EEPROM after writing
+ */
+
+void eeprom_lock(void);
+
+/*
+ *  Write word to EEPROM
+ *  in: source, dest
+ */
+
+void eeprom_word(char *, char *);

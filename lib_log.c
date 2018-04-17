@@ -22,10 +22,6 @@
 #include "lib_log.h"
 #include "lib_clock.h"
 
-static char eeprom_unlock(void);
-static void eeprom_lock(void);
-static void eeprom_word(char *, char *);
-
 static LOG_ENTRY *log_base;
 static LOG_ENTRY *log_end;
 static LOG_ENTRY *log_old;	/* oldest log entry */
@@ -193,7 +189,7 @@ void log_scan(void (*callback)(LOG_ENTRY *))
  * out: zero = fail
  */
 
-static char eeprom_unlock(void)
+char eeprom_unlock(void)
 {
 __asm
     mov		_FLASH_DUKR, #0xae
@@ -212,7 +208,7 @@ __endasm;
  * Lock EEPROM from writing after write
  */
 
-static void eeprom_lock(void)
+void eeprom_lock(void)
 {
 __asm
     bres	_FLASH_IAPSR, #3
