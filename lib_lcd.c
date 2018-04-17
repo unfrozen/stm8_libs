@@ -161,7 +161,6 @@ void lcd_init(void)
 #ifdef STM8105
     PF_DDR = 0x10;
     PF_CR1 = 0x10;
-    PF_CR2 = 0x10;
 #endif
     delay_ms(50);
     lcd_nybble(0x30);		/* start with 8-bit mode */
