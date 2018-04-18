@@ -112,7 +112,7 @@ char log_write(char type)
     LOG_ENTRY	entry;
     char	binary[4], *src, *dst;
 
-    clock_binary(binary);
+    clock_bin_get(binary);
     entry.stamp = log_stamp;
     entry.type  = type;
     entry.clock_h = binary[1];

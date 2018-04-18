@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.c
  *  Date first: 03/23/2018
- *  Date last:  04/12/2018
+ *  Date last:  04/18/2018
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -88,13 +88,29 @@ void clock_string(char *buf)
  *  out: (4 bytes set)
  */
 
-void clock_binary(char *vals)
+void clock_bin_get(char *vals)
 {
     clock_lock = 1;
     vals[0] = clock_days;
     vals[1] = clock_hours;
     vals[2] = clock_mins;
     vals[3] = clock_secs;
+    clock_lock = 0;
+}
+
+/******************************************************************************
+ *
+ *  Set clock from binary values
+ *  out: (4 bytes set)
+ */
+
+void clock_bin_set(char *vals)
+{
+    clock_lock = 1;
+    clock_days  = vals[0];
+    clock_hours = vals[1];
+    clock_mins  = vals[2];
+    clock_secs  = vals[3];
     clock_lock = 0;
 }
 

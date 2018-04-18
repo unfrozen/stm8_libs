@@ -33,11 +33,12 @@ void clock_string(char *);
 char clock_set(char *);
 
 /*
- *  Get binary values for day, hour, minute, second
+ *  Get/set binary values for day, hour, minute, second
  *  out: (4 bytes set)
  */
 
-void clock_binary(char *);
+void clock_bin_get(char *);
+void clock_bin_set(char *);
 
 /*
  *  Set large and fine clock trim
