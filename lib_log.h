@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.h
  *  Date first: 03/26/2018
- *  Date last:  04/16/2018
+ *  Date last:  04/17/2018
  *
  *  Description: Library for maintaining a many entry system log
  *
@@ -22,12 +22,6 @@ typedef struct {
     char	clock_m;	/* clock minute */
     char	clock_s;	/* clock second */
 } LOG_ENTRY;
-
-#define LOG_STARTUP	1
-#define LOG_DEVON	2
-#define LOG_DEVOFF	3
-#define LOG_TIMESET	4
-#define LOG_NEWDAY	5
 
 /*
  *  Initialize the log library
