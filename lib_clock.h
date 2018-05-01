@@ -48,11 +48,6 @@ void clock_bin_set(char *);
 
 void clock_trim(signed char, signed char);
 
-/*  DEBUGGING: Expose the clock trim values  */
-
-static signed char	trim_large;
-static signed char	trim_fine;
-
 /*
  *  Interrupt service routine declaration
  */

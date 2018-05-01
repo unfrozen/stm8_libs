@@ -10,6 +10,9 @@
 #define EEPROM		PTR(0x4000)
 #define EEPROM_SIZE	1024
 
+#define FLASH_BASE	PTR(0x8000)
+#define FLASH_SIZE	16834
+
 #define UNIQUE_ID	PTR(0x48cd)	// 12-byte unique id
 
 #define PA_ODR		PTR(0x5000)	// Port A output latch
