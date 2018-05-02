@@ -55,6 +55,11 @@ char log_write(char);
 void log_scan(void (*callback)(LOG_ENTRY *));
 
 /*
+ *  Get count of valid log entries
+ */
+short log_valid(void);
+
+/*
  *  Unlock the EEPROM for writing
  * out: zero = fail
  */

@@ -201,6 +201,27 @@ void log_scan(void (*callback)(LOG_ENTRY *))
 
 /******************************************************************************
  *
+ *  Get count of valid log entries
+ */
+
+short log_valid(void)
+{
+    LOG_ENTRY	*entry;
+    short	count;
+
+    entry = log_base;
+    count = 0;
+
+    while (entry != log_end) {
+	if (entry->stamp)
+	    count++;
+	entry++;
+    }
+    return count;
+}
+
+/******************************************************************************
+ *
  * Unlock EEPROM for writing
  * out: zero = fail
  */
