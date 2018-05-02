@@ -12,6 +12,7 @@
 
 #define FLASH_BASE	PTR(0x8000)
 #define FLASH_SIZE	16834
+#define FLASH_BLOCK	128
 
 #define UNIQUE_ID	PTR(0x48cd)	// 12-byte unique id
 
