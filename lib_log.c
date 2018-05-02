@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.c
  *  Date first: 03/26/2018
- *  Date last:  04/06/2018
+ *  Date last:  05/02/2018
  *
  *  Description: Library for using a many entry system log
  *
@@ -28,9 +28,16 @@ static LOG_ENTRY *log_old;	/* oldest log entry */
 static LOG_ENTRY *log_new;	/* newest log entry */
 
 static int  log_size;		/* number bytes in each entry */
-static char log_count;		/* number of log entries */
+static short log_count;		/* number of log entries */
 
 static long log_stamp;
+
+static char flash_erase(char *);
+static void flash_lock(void);
+static char flash_unlock(void);
+
+static void (*mem_lock)(void);
+static char (*mem_unlock)(void);
 
 /******************************************************************************
  *
@@ -38,10 +45,10 @@ static long log_stamp;
  * in: base address, number of enties
  */
 
-void log_init(char *base, char count)
+void log_init(char *base, short count)
 {
     LOG_ENTRY	*old, *new, *ptr;
-    char	i;
+    short	i;
 
     log_base  = (LOG_ENTRY *)base;
     log_end   = log_base + count;
@@ -67,6 +74,15 @@ void log_init(char *base, char count)
     log_stamp++;
     log_old = old;
     log_new = new;
+
+    if (((short)base > 0x8000)) {
+	mem_lock   = flash_lock;
+	mem_unlock = flash_unlock;
+    }
+    else {
+	mem_lock   = eeprom_lock;
+	mem_unlock = eeprom_unlock;
+    }
 }
 
 /******************************************************************************
@@ -76,7 +92,7 @@ void log_init(char *base, char count)
 void log_erase(void)
 {
     char	*ptr, zero[4];
-    char	i;
+    short	i;
 
     zero[0] = 0;
     zero[1] = 0;
@@ -86,7 +102,7 @@ void log_erase(void)
     ptr = (char *)log_base;
     i = log_count;
 
-    if (!eeprom_unlock())
+    if (!mem_unlock())
 	return;
     while (i) {
 	eeprom_word(zero, ptr);
@@ -95,7 +111,7 @@ void log_erase(void)
 	ptr += 4;
 	i--;
     }
-    eeprom_lock();
+    mem_lock();
     log_stamp = 0;
     log_old = log_base;
     log_new = log_base;
@@ -119,7 +135,7 @@ char log_write(char type)
     entry.clock_m = binary[2];
     entry.clock_s = binary[3];
 
-    if (!eeprom_unlock())
+    if (!mem_unlock())
 	return 1;
 
     log_new++;
@@ -135,7 +151,7 @@ char log_write(char type)
 
     eeprom_word(src, dst);
     eeprom_word(src + 4, dst + 4);
-    eeprom_lock();
+    mem_lock();
 
     return 0;
 }
@@ -162,7 +178,7 @@ __endasm;
 }
 
 /******************************************************************************
-*
+ *
  *  Scan all log entries
  *  in: callback function for each entry
  */
@@ -239,3 +255,63 @@ __asm
     pop		a
 __endasm;
 }
+
+/******************************************************************************
+ *
+ *  Erase FLASH block (64 or 128 bytes)
+ *  in: block address
+ * out: zero = success
+ */
+
+char flash_erase(char *ptr)
+{
+    ptr;
+__asm
+    bset	_FLASH_CR2, #5
+    bres	_FLASH_NCR2, #5
+    ldw		x, (3, sp)
+    clr		(x)
+    ldw		x, #4000*16/5
+    clr		a
+00001$:
+    decw	x
+    jreq	00090$
+    btjt	_FLASH_CR2, #5, 00001$
+    ret
+00090$:
+    inc		a
+__endasm;
+}
+
+/******************************************************************************
+ *
+ * Unlock FLASH for writing
+ * out: zero = fail
+ */
+
+char flash_unlock(void)
+{
+__asm
+    mov		_FLASH_PUKR, #0x56
+    mov		_FLASH_PUKR, #0xae
+    clr		a
+00001$:
+    dec		a
+    jreq	00090$
+    btjf	_FLASH_IAPSR, #1, 00001$
+00090$:
+__endasm;
+}
+
+/******************************************************************************
+ *
+ * Lock FLASH from writing after write
+ */
+
+void flash_lock(void)
+{
+__asm
+    bres	_FLASH_IAPSR, #1
+__endasm;
+}
+

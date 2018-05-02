@@ -27,7 +27,7 @@ typedef struct {
  *  Initialize the log library
  *  in: base address, number of entries
  */
-void log_init(char *, char);
+void log_init(char *, short);
 
 /*
  *  Advance log timestamp
