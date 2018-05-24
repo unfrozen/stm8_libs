@@ -16,19 +16,6 @@
 
 #define UNIQUE_ID	PTR(0x4865)	// 12-byte unique id
 
-#define PORT_A         PTR(0x5000)
-#define PORT_B         PTR(0x5005)
-#define PORT_C         PTR(0x500a)
-#define PORT_D         PTR(0x500f)
-#define PORT_E         PTR(0x5014)
-#define PORT_F         PTR(0x5010)
-
-#define PORT_ODR       0
-#define PORT_IDR       1
-#define PORT_DDR       2
-#define PORT_CR1       3
-#define PORT_CR2       4
-
 #define PA_ODR		PTR(0x5000)	// Port A output latch
 #define PA_IDR		PTR(0x5001)	// Port A input status
 #define PA_DDR		PTR(0x5002)	// Port A data direction
@@ -139,16 +126,6 @@
 
 #define ADC_DB0RH       PTR(0x53e0)     // ADC data buffer 0 high
 #define ADC_DB0RL       PTR(0x53e1)     // ADC data buffer 0 low 
-#define ADC_DB1RH       PTR(0x53e2)     
-#define ADC_DB1RL       PTR(0x53e3)     
-#define ADC_DB2RH       PTR(0x53e4)
-#define ADC_DB2RL       PTR(0x53e5)
-#define ADC_DB3RH       PTR(0x53e6)
-#define ADC_DB3RL       PTR(0x53e7)
-#define ADC_DB4RH       PTR(0x53e8)
-#define ADC_DB4RL       PTR(0x53e9)
-#define ADC_DB5RH       PTR(0x53ea)
-#define ADC_DB5RL       PTR(0x53eb)
 
 #define ADC_CSR         PTR(0x5400)     // ADC control/status
 #define ADC_CR1         PTR(0x5401)     // ADC config reg 1

@@ -5,19 +5,6 @@
 
 #define _UNIQUE_ID	0x4865       // 12-byte unique id
 
-#define _PORT_A		0x5000
-#define _PORT_B		0x5005
-#define _PORT_C		0x500a
-#define _PORT_D		0x500f
-#define _PORT_E		0x5014
-#define _PORT_F		0x5010
-
-#define _PORT_ODR	0
-#define _PORT_IDR	1
-#define _PORT_DDR	2
-#define _PORT_CR1	3
-#define _PORT_CR2	4
-
 #define _PA_ODR		0x5000
 #define _PA_IDR		0x5001
 #define _PA_DDR		0x5002
