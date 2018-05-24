@@ -16,6 +16,19 @@
 
 #define UNIQUE_ID	PTR(0x48cd)	// 12-byte unique id
 
+#define PORT_A         PTR(0x5000)
+#define PORT_B         PTR(0x5005)
+#define PORT_C         PTR(0x500a)
+#define PORT_D         PTR(0x500f)
+#define PORT_E         PTR(0x5014)
+#define PORT_F         PTR(0x5010)
+
+#define PORT_ODR       0
+#define PORT_IDR       1
+#define PORT_DDR       2
+#define PORT_CR1       3
+#define PORT_CR2       4
+
 #define PA_ODR		PTR(0x5000)	// Port A output latch
 #define PA_IDR		PTR(0x5001)	// Port A input status
 #define PA_DDR		PTR(0x5002)	// Port A data direction

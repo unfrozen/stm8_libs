@@ -10,7 +10,7 @@
 
 #ifdef STM8105
 #include "stm8_105.h"
-#include "stm8s_105.inc"
+#include "stm8_105.inc"
 #endif
 
 #include "vectors.h"
