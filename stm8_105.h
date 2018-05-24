@@ -144,4 +144,33 @@
 #define TIM4_PSCR	PTR(0x5345)	// TIM4 prescaler
 #define TIM4_ARR	PTR(0x5346)	// TIM4 auto reload
 
+#define ADC_DB0RH	PTR(0x53e0)	// ADC data buffer 0 high
+#define ADC_DB0RL	PTR(0x53e1)	// ADC data buffer 0 low
+#define ADC_DB1RH	PTR(0x53e2)
+#define ADC_DB1RL	PTR(0x53e3)
+#define ADC_DB2RH	PTR(0x53e4)
+#define ADC_DB2RL	PTR(0x53e5)
+#define ADC_DB3RH	PTR(0x53e6)
+#define ADC_DB3RL	PTR(0x53e7)
+#define ADC_DB4RH	PTR(0x53e8)
+#define ADC_DB4RL	PTR(0x53e9)
+#define ADC_DB5RH	PTR(0x53ea)
+#define ADC_DB5RL	PTR(0x53eb)
+
+#define ADC_CSR		PTR(0x5400)	// ADC control/status
+#define ADC_CR1		PTR(0x5401)	// ADC config reg 1
+#define ADC_CR2		PTR(0x5402)	// ADC config reg 2
+#define ADC_CR3		PTR(0x5403)	// ADC config reg 3
+#define ADC_DRH		PTR(0x5404)	// ADC data register high
+#define ADC_DRL		PTR(0x5405)	// ADC data register low
+#define ADC_TDRH	PTR(0x5406)	// ADC Schmitt trigger disable high
+#define ADC_TDRL	PTR(0x5407)	// ADC Schmitt trigger disable low
+#define ADC_HTRH	PTR(0x5408)	// ADC high threshold high
+#define ADC_HTRL	PTR(0x5409)	// ADC high trheshold low
+#define ADC_LTRH	PTR(0x540a)	// ADC low threshold high
+#define ADC_LTRL	PTR(0x540b)	// ADC low threshold low
+#define ADC_AWSRH	PTR(0x540c)	// ADC watchdog status high 
+#define ADC_AWSRL	PTR(0x540d)	// ADC watchdog status low
+#define ADC_AWCRH	PTR(0x540e)	// ADC watchdog control high
+#define ADC_AWCRL	PTR(0x540f)	// ADC watchdog control low
 
