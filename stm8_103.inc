@@ -75,6 +75,26 @@
 #define _TIM2_CCR3H      0x5315     // TIM2 cap/comp 3 high
 #define _TIM2_CCR3L      0x5316     // TIM2 cap/comp 3 low
 
+#define _ADC_DB0RH       0x53e0     // ADC data buffer 0 high
+#define _ADC_DB0RL       0x53e1     // ADC data buffer 0 low 
+
+#define _ADC_CSR         0x5400     // ADC control/status
+#define _ADC_CR1         0x5401     // ADC config reg 1
+#define _ADC_CR2         0x5402     // ADC config reg 2
+#define _ADC_CR3         0x5403     // ADC config reg 3
+#define _ADC_DRH         0x5404     // ADC data register high
+#define _ADC_DRL         0x5405     // ADC data register low
+#define _ADC_TDRH        0x5406     // ADC Schmitt trigger disable high
+#define _ADC_TDRL        0x5407     // ADC Schmitt trigger disable low
+#define _ADC_HTRH        0x5408     // ADC high threshold high
+#define _ADC_HTRL        0x5409     // ADC high trheshold low
+#define _ADC_LTRH        0x540a     // ADC low threshold high
+#define _ADC_LTRL        0x540b     // ADC low threshold low
+#define _ADC_AWSRH       0x540c     // ADC watchdog status high
+#define _ADC_AWSRL       0x540d     // ADC watchdog status low 
+#define _ADC_AWCRH       0x540e     // ADC watchdog control high
+#define _ADC_AWCRL       0x540f     // ADC watchdog control low 
+
 #define	_ITC_SPR1	0x7f70
 #define	_ITC_SPR2	0x7f71
 #define	_ITC_SPR3	0x7f72
