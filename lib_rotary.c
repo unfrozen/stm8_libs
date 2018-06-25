@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_rotary.c
  *  Date first: 12/29/2017
- *  Date last:  12/29/2017
+ *  Date last:  06/24/2018
  *
  *  Description: STM8 Library for ALPS rotary encoder
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -18,14 +18,16 @@
  *  PA2: encoder B
  */
 
-#include "stm8.h"
+#include "stm8s_header.h"
+#include "lib_rotary.h"
 
 #define PIN_MASK (2 | 4)
 
-char val_cur;
-char val_max;
-char direction;
-char pins_last;
+static char val_cur;
+static char val_max;
+static char direction;
+static char pins_last;
+static char roll_up, roll_down;
 
 /******************************************************************************
  *
@@ -33,7 +35,7 @@ char pins_last;
  *  in: number of steps
  */
 
-void alps_init(char steps)
+void alps_init(char steps, char option)
 {
     PA_DDR &= ~(PIN_MASK);	/* PA1, PA2 inputs */
     PA_CR2 &= ~(PIN_MASK);	/* no interrupts */
@@ -43,6 +45,14 @@ void alps_init(char steps)
     val_max = steps;
     direction = 0;
     pins_last = PA_IDR & PIN_MASK;
+
+    /* assume ALPS_LIMITS option */
+    roll_up = steps - 1;	/* new value when val_cur hits maximum */
+    roll_down = 1;		/* value (adjusted ) when val_cur goes < 0 */
+    if (option == ALPS_ROLLOVER) {
+	roll_up = 0;
+	roll_down = steps;
+    }
 }
 
 /******************************************************************************
@@ -74,11 +84,11 @@ void alps_poll(void)
 	    if (direction) {
 		val_cur++;
 		if (val_cur == val_max)
-		    val_cur = 0;
+		    val_cur = roll_up;
 		return;
 	    }
 	    if (val_cur == 0)
-		val_cur = val_max;
+		val_cur = roll_down;
 	    val_cur--;
 	    return;
 	}
