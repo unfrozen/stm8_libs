@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.h
  *  Date first: 03/26/2018
- *  Date last:  04/17/2018
+ *  Date last:  08/21/2018
  *
  *  Description: Library for maintaining a many entry system log
  *
@@ -58,19 +58,6 @@ void log_scan(void (*callback)(LOG_ENTRY *));
  *  Get count of valid log entries
  */
 short log_valid(void);
-
-/*
- *  Unlock the EEPROM for writing
- * out: zero = fail
- */
-
-char eeprom_unlock(void);
-
-/*
- *  Lock EEPROM after writing
- */
-
-void eeprom_lock(void);
 
 /*
  *  Write word to EEPROM

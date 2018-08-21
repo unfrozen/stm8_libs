@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.c
  *  Date first: 03/26/2018
- *  Date last:  05/02/2018
+ *  Date last:  08/21/2018
  *
  *  Description: Library for using a many entry system log
  *
@@ -21,6 +21,7 @@
 
 #include "lib_log.h"
 #include "lib_clock.h"
+#include "lib_eeprom.h"
 
 static LOG_ENTRY *log_base;
 static LOG_ENTRY *log_end;
@@ -218,38 +219,6 @@ short log_valid(void)
 	entry++;
     }
     return count;
-}
-
-/******************************************************************************
- *
- * Unlock EEPROM for writing
- * out: zero = fail
- */
-
-char eeprom_unlock(void)
-{
-__asm
-    mov		_FLASH_DUKR, #0xae
-    mov		_FLASH_DUKR, #0x56
-    clr		a
-00001$:
-    dec		a
-    jreq	00090$
-    btjf	_FLASH_IAPSR, #3, 00001$
-00090$:
-__endasm;
-}
-
-/******************************************************************************
- *
- * Lock EEPROM from writing after write
- */
-
-void eeprom_lock(void)
-{
-__asm
-    bres	_FLASH_IAPSR, #3
-__endasm;
 }
 
 /******************************************************************************
