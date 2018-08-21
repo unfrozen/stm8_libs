@@ -14,6 +14,9 @@
 #define FLASH_SIZE	16834
 #define FLASH_BLOCK	128
 
+#define OPT2		PTR(0x4803)	// Alternate function remap
+#define NOPT2		PTR(0x4804)
+
 #define UNIQUE_ID	PTR(0x48cd)	// 12-byte unique id
 
 #define PA_ODR		PTR(0x5000)	// Port A output latch
