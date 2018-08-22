@@ -138,6 +138,8 @@ static void set_remap(char val)
     char	cfg;
 
     eeprom_unlock();
+    FLASH_CR2 = 0x80;		/* enable option byte */
+    FLASH_NCR2 = 0x7f;
     cfg = OPT2;
     cfg &= 0xfd;
     cfg |= val;
