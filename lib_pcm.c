@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_pcm.c
  *  Date first: 08/20/2018
- *  Date last:  08/21/2018
+ *  Date last:  08/22/2018
  *
  *  Description: STM8 Library for PCM and servos
  *

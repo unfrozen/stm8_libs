@@ -3,6 +3,9 @@
  *  Names are preceded with underscore.
  */
 
+#define _OPT2           0x4803       // Alternate function remap
+#define _NOPT2          0x4804
+
 #define _UNIQUE_ID	0x48cd       // 12-byte unique id
 
 #define _PA_ODR		0x5000
