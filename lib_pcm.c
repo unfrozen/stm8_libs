@@ -94,8 +94,8 @@ void pcm_servo(char chan, char pos)
 {
     int		duty;
 
-    duty  = pos * 8;		/* get 0 to 1000 milliseconds */
-    duty += 2000;		/* now 1000 to 2000 mS */
+    duty  = pos * 16;		/* get 0 to 2000 milliseconds */
+    duty += 1000;		/* now 500 to 2500 mS */
 
     set_duty(chan, duty);
 }
