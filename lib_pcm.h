@@ -14,6 +14,16 @@
  *  One, two, or three channels are supported.
  *  This library uses Timer2
  *
+ *  STM8S103F:
+ *    C1 = pin  1 (D4) alt: 15 (C5)
+ *    C2 = pin 20 (D3)
+ *    C3 = pin 10 (A3) alt: 19 (D2)
+ *
+ *  STM8S105K: (not SPDIP32)
+ *    C1 = pin 29 (D4)
+ *    C2 = pin 28 (D3)
+ *    C3 = pin 27 (D2) reassigned: note pin A3 is only on the 48 pin part
+ *
  *  Initialize PCM
  *  in: mode, channels to use
  */
@@ -29,14 +39,15 @@ void pcm_init(char, char);
 
 /*
  *  Set new PCM duty cycle
- *  in: channel, percentage: 0 to 100
+ *  in: channel(s), percentage/2: 0 to 200
  */
 
 void pcm_duty(char, char);
 
 /*
  *  Set new servo position
- *  in: channel, position: 0 to 255
+ *  in: channel(s), position: 0 to 255
  */
 
 void pcm_servo(char, char);
+
