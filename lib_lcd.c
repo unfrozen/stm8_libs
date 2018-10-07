@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  04/13/2018
+ *  Date last:  10/07/2018
  *
  *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
@@ -74,7 +74,7 @@ void lcd_curs(char line, char col)
  *  Write data byte to lcd
  */
 
-void lcd_put(char val)
+void lcd_putc(char val)
 {
     val;
 __asm
@@ -106,7 +106,7 @@ void lcd_puts(char *s)
     while (1) {
 	if (*s == 0)
 	    return;
-	lcd_put(*s);
+	lcd_putc(*s);
 	s++;
     }
 }
