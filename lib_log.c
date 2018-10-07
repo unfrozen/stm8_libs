@@ -252,6 +252,7 @@ __endasm;
  *  in: block address
  * out: zero = success
  */
+#pragma disable_warning 59
 
 char flash_erase(char *ptr)
 {

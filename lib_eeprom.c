@@ -22,6 +22,7 @@
  * Unlock EEPROM for writing
  * out: zero = fail
  */
+#pragma disable_warning 59
 
 char eeprom_unlock(void)
 {

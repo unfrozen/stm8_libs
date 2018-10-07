@@ -90,6 +90,7 @@ __endasm;
  *
  *  Receive 8 bits
  */
+#pragma disable_warning 59
 
 char i2c_rxbit8(void)
 {

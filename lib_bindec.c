@@ -365,6 +365,7 @@ __endasm;
  *  Convert ASCII decimal digits to 16-bit binary
  *  Stops on first non-decimal character
  */
+#pragma disable_warning 59
 
 int dec_bin16(char *dec)
 {
