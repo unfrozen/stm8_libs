@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_uart.c
  *  Date first: 12/30/2017
- *  Date last:  04/11/2018
+ *  Date last:  10/08/2018
  *
  *  Description: STM8 Library for UART1 and UART2
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -21,8 +21,8 @@
  *  Buffers and counters
  */
 
-static char uart_rxbuf[16];
-static char uart_txbuf[16];
+static char uart_rxbuf[UART_BUF_RX];
+static char uart_txbuf[UART_BUF_TX];
 
 static volatile char tx_get, tx_put;
 static volatile char rx_get, rx_put;
@@ -67,7 +67,7 @@ char uart_rsize(void)
 
     size = rx_put - rx_get;
     if (size < 0)
-	size += 16;
+	size += UART_BUF_RX;
     return size;
 }
 
@@ -83,7 +83,7 @@ char uart_get(void)
 
     byte = uart_rxbuf[rx_get];
     rx_get++;
-    rx_get &= 0x0f;
+    rx_get &= (UART_BUF_RX - 1);
 
     return byte;
 }
@@ -96,7 +96,7 @@ void uart_put(char byte)
 {
     char	new_ptr;
 
-    new_ptr = (tx_put + 1) & 0x0f;
+    new_ptr = (tx_put + 1) & (UART_BUF_TX - 1);
     while (tx_get == new_ptr);
     uart_txbuf[tx_put] = byte;
     tx_put = new_ptr;
@@ -148,7 +148,7 @@ void uart_tx_isr(void) __interrupt (IRQ_UART_TX)
 	return;
     }
     UART_DR = uart_txbuf[tx_get];
-    tx_get = (tx_get + 1) & 0x0f;
+    tx_get = (tx_get + 1) & (UART_BUF_TX - 1);
     if (tx_get == tx_put)
 	UART_CR2 &= ~SR_TXE;
 }
@@ -166,7 +166,7 @@ void uart_rx_isr(void) __interrupt (IRQ_UART_RX)
     rxbyte = UART_DR;
     uart_rxbuf[rx_put] = rxbyte;
 
-    new_ptr = (rx_put + 1) & 0x0f;
+    new_ptr = (rx_put + 1) & (UART_BUF_RX - 1);
     if (new_ptr != rx_get)
 	rx_put = new_ptr;
     else

@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_uart.h
  *  Date first: 12/30/2017
- *  Date last:  04/11/2018
+ *  Date last:  10/08/2018
  *
  *  Description: STM8 Library for UART1
  *
@@ -12,6 +12,13 @@
  *
  ******************************************************************************
  *
+ *  Set RX and TX buffer sizes here
+ */
+
+#define UART_BUF_RX	16	/* must be power of 2 */
+#define UART_BUF_TX	16	/* must be power of 2 */
+
+/*
  *  UART init
  *  in: baud rate (see defines below)
  */
