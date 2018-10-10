@@ -16,7 +16,7 @@
  *  Define SDCC here or in the Makefile, COSMIC defaults otherwise.
  */
 
-#ifndef SDCC
+#ifndef __SDCC
 #define COSMIC
 #endif
 
@@ -31,7 +31,7 @@ void bin16_dec(short bin, char *dec)
 {
     bin, dec;
 
-#ifdef SDCC
+#ifdef __SDCC
 __asm
     ldw		x, (3, sp)
 #endif
@@ -69,7 +69,7 @@ __asm
 
     ld		a, yl
     add		a, #'0'
-#ifdef SDCC
+#ifdef __SDCC
     ldw		x, (9, sp)	/* decimal buffer */
 #endif
 #ifdef COSMIC
@@ -83,7 +83,7 @@ __asm
 
     clr		(5, x)
     add		sp, #4
-#ifdef SDCC
+#ifdef __SDCC
 __endasm;
 #endif
 #ifdef COSMIC
@@ -102,7 +102,7 @@ void bin32_dec(long bin, char *dec)
 {
     bin, dec;
 
-#ifdef SDCC
+#ifdef __SDCC
 __asm
     ldw		x, (7, sp)	; decimal buffer pointer
     ldw		y, sp
@@ -321,7 +321,7 @@ __endasm;
 
 void bin8_hex(char val, char *hex)
 {
-#ifdef SDCC
+#ifdef __SDCC
     val, hex;
 __asm
     ldw		x, (4, sp)
