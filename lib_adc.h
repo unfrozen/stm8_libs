@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_adc.h
  *  Date first: 09/14/2018
- *  Date last:  09/14/2018
+ *  Date last:  10/11/2018
  *
  *  Description: Library for using STM8S ADC.
  *
@@ -35,3 +35,10 @@ void adc_init(char);
  *  out: 10-bit A/D conversion value, -1 if timeout
  */
 short adc_val(char);
+
+/*
+ *  Get average of 4 A/D samples
+ *  in:  ADC channel (0 to 12)
+ *  out: 10-bit A/D average value, -1 if timeout
+ */
+short adc_avg(char);

@@ -61,6 +61,53 @@ __endasm;
 
 /******************************************************************************
  *
+ *  Get average of 4 A/D samples
+ *  in:  ADC channel (0 to 12)
+ *  out: 10-bit A/D average value, -1 if timeout
+ */
+short adc_avg(char chan)
+{
+#ifdef ORIG_C
+    short	avg, val;
+    char	i;
+
+    avg = 2;
+    for (i = 0; i < 4; i++) {
+	val = adc_val(chan);
+	if (val < 0)
+	    return -1;
+	avg += val;
+    }
+    return avg >> 2;
+#else
+#pragma disable_warning 59
+    chan;
+__asm
+    ldw		x, #2
+    pushw	x
+    push	#4
+00001$:
+    ld		a, (6, sp)
+    push	a
+    call	_adc_val
+    pop		a
+    tnzw	x
+    jrmi	000090$
+    addw	x, (2, sp)
+    ldw		(2, sp), x
+    dec		(1, sp)
+    jrne	00001$
+
+    srlw	x
+    srlw	x
+00090$:
+    add		sp, #3
+__endasm;
+#endif
+}
+
+/******************************************************************************
+ *
  *  Get current raw A/D value
  *  in:  ADC channel (0 to 12)
  *  out: 10-bit A/D conversion value, -1 if timeout
