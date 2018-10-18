@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_flash.h
  *  Date first: code clipped from lib_log
- *  Date last:  10/17/2018
+ *  Date last:  10/18/2018
  *
  *  Description: Library for Flash memory functions
  *
@@ -28,6 +28,8 @@ char flash_unlock(void);
  */
 
 void flash_lock(void);
+
+#define FLASH_BLOCK_ERASE /* comment out to save setup and 30 bytes of RAM */
 
 /*
  *  Erase FLASH block (64 or 128 bytes)

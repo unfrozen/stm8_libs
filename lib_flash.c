@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_flash.c
  *  Date first: code clipped from lib_log
- *  Date last:  10/17/2018
+ *  Date last:  10/18/2018
  *
  *  Description: Library for Flash memory functions
  *
@@ -19,8 +19,10 @@
 
 #include "lib_flash.h"
 
+#ifdef FLASH_BLOCK_ERASE
 static char p_flash_erase(char *);
 static char r_flash_erase[30];
+#endif
 
 #pragma disable_warning 59
 
@@ -32,9 +34,12 @@ static char r_flash_erase[30];
 
 void flash_init(void)
 {
+#ifdef FLASH_BLOCK_ERASE
     memcpy(r_flash_erase, p_flash_erase, 30);
+#endif
 }
 
+#ifdef FLASH_BLOCK_ERASE
 /******************************************************************************
  *
  *  Erase FLASH block (64 or 128 bytes)
@@ -75,6 +80,7 @@ __asm
     inc		a
 __endasm;
 }
+#endif	/* FLASH_BLOCK_ERASE */
 
 /******************************************************************************
  *
@@ -119,18 +125,20 @@ char flash_clear(char *ptr, int size)
     char	retval;
 
     retval = flash_unlock();
-    if (retval)
-	return retval;
-    while (((int)ptr & FLASH_BLOCK) & size) {
+    if (!retval)
+	return 1;
+#ifdef FLASH_BLOCK_ERASE
+    while (((int)ptr & (FLASH_BLOCK - 1)) && size) {
 	*ptr = 0;
 	ptr++;
 	size--;
     }
     while (size >= FLASH_BLOCK) {
-	retval = flash_erase(ptr);
+	retval |= flash_erase(ptr);
 	ptr  += FLASH_BLOCK;
 	size -= FLASH_BLOCK;
     }
+#endif
     while (size) {
 	*ptr = 0;
 	ptr++;
