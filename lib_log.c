@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_log.c
  *  Date first: 03/26/2018
- *  Date last:  08/21/2018
+ *  Date last:  10/16/2018
  *
  *  Description: Library for using a many entry system log
  *
@@ -22,6 +22,7 @@
 #include "lib_log.h"
 #include "lib_clock.h"
 #include "lib_eeprom.h"
+#include "lib_flash.h"
 
 static LOG_ENTRY *log_base;
 static LOG_ENTRY *log_end;
@@ -32,10 +33,6 @@ static int  log_size;		/* number bytes in each entry */
 static short log_count;		/* number of log entries */
 
 static long log_stamp;
-
-static char flash_erase(char *);
-static void flash_lock(void);
-static char flash_unlock(void);
 
 static void (*mem_lock)(void);
 static char (*mem_unlock)(void);
@@ -245,64 +242,3 @@ __asm
     pop		a
 __endasm;
 }
-
-/******************************************************************************
- *
- *  Erase FLASH block (64 or 128 bytes)
- *  in: block address
- * out: zero = success
- */
-#pragma disable_warning 59
-
-char flash_erase(char *ptr)
-{
-    ptr;
-__asm
-    bset	_FLASH_CR2, #5
-    bres	_FLASH_NCR2, #5
-    ldw		x, (3, sp)
-    clr		(x)
-    ldw		x, #4000*16/5
-    clr		a
-00001$:
-    decw	x
-    jreq	00090$
-    btjt	_FLASH_CR2, #5, 00001$
-    ret
-00090$:
-    inc		a
-__endasm;
-}
-
-/******************************************************************************
- *
- * Unlock FLASH for writing
- * out: zero = fail
- */
-
-char flash_unlock(void)
-{
-__asm
-    mov		_FLASH_PUKR, #0x56
-    mov		_FLASH_PUKR, #0xae
-    clr		a
-00001$:
-    dec		a
-    jreq	00090$
-    btjf	_FLASH_IAPSR, #1, 00001$
-00090$:
-__endasm;
-}
-
-/******************************************************************************
- *
- * Lock FLASH from writing after write
- */
-
-void flash_lock(void)
-{
-__asm
-    bres	_FLASH_IAPSR, #1
-__endasm;
-}
-
