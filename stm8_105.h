@@ -126,6 +126,15 @@
 #define TIM2_CCR3H      PTR(0x5313)     // TIM2 cap/comp 3 high
 #define TIM2_CCR3L      PTR(0x5314)     // TIM2 cap/comp 3 low
 
+#define TIMx_CEN	(1 << 0)	// counter enable
+#define TIMx_UIE	(1 << 0)	// update interrupt
+#define TIMx_CC1IE	(1 << 1)	// capture/compare 1 interrupt
+#define TIMx_CC2IE	(1 << 2)	// capture/compare 2 interrupt
+#define TIMx_CC3IE	(1 << 3)	// capture/compare 3 interrupt
+#define TIMx_CC1E	(1 << 0)	// capture 1 enable
+#define TIMx_CC1G	(1 << 1)	// capture/compare 1 generation
+#define TIMx_CC1P	(1 << 1)	// capture/compare 1 polarity
+
 #define TIM4_CR1	PTR(0x5340)	// TIM4 control 1
 #define TIM4_IER	PTR(0x5341)	// TIM4 interrupt enable
 #define TIM4_SR		PTR(0x5342)	// TIM4 status
