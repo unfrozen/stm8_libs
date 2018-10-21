@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_cap2.c
  *  Date first: 01/08/2018
- *  Date last:  01/09/2018
+ *  Date last:  10/21/2018
  *
  *  Description: STM8 Library for capture on Timer2
  *
@@ -17,7 +17,7 @@
  *  Pin 1, PD4: Timer2 channel 1
  */
 
-#include "stm8.h"
+#include "stm8s_header.h"
 #include "lib_cap2.h"
 
 /******************************************************************************
