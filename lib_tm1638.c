@@ -8,6 +8,7 @@
  *  Author:     Richard Hodges
  *
  *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Permission is hereby granted for any use.
  *  Some code copied from lib_max7219.c
  *
  ******************************************************************************
