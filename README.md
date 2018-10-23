@@ -1,6 +1,7 @@
 # stm8_libs
 Library collection for STM8, specifically stm8s103 and stm8s105.
-At the moment, my personal web pages have better documentation on the libraries here:
+My personal web pages have better pretty much the same documentation, but have nice
+pictures and links to buy cheap parts on eBay:
 http://www.hodges.org/rh/stm8
 
 My intent is to have a good working set of libraries to simplify the use of internal
