@@ -14,7 +14,7 @@
  *
  * Delays
  */
-void delay_500ns(void);
-void delay_usecs(char);
-void delay_50us(void);
-void delay_ms(unsigned char);
+void delay_500ns(void);		/* 500 microseconds */
+void delay_usecs(char);		/* 1 to 255 microseconds */
+void delay_50us(void);		/* 50 microseconds */
+void delay_ms(unsigned char);	/* 1 to 255 milliseconds (setup code) */
