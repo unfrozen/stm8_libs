@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_pins.h
  *  Date first: 11/04/2018
- *  Date last:  11/04/2018
+ *  Date last:  11/14/2018
  *
  *  Description: STM8 Library to simplify pin usage.
  *
@@ -16,6 +16,19 @@
  */
 typedef struct {
     volatile char *reg_base;	/* port ODR register */
-    char	 reg_mask;	/* bit for row or column */
+    char	 reg_mask;	/* bit to use */
 } IO_PIN;
 
+/* Define one pin and a callback function */
+
+typedef struct {
+    IO_PIN	*pin;
+    void	(*callback)(void);
+} IO_CALL;
+
+/* Define one pin and a callback function that gets int */
+
+typedef struct {
+    IO_PIN	*pin;
+    void	(*callback)(int);
+} IO_CALL_INT;
