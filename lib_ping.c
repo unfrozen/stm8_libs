@@ -28,7 +28,7 @@ typedef struct {
 
 static PING_DATA ping_data[3];
 
-char active;			/* channel active flags */
+static char active;		/* channel active flags */
 
 static char clock_hi;		/* make 24 bits for timer2 */
 
