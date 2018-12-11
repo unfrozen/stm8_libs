@@ -35,9 +35,6 @@ static char clock_hi;		/* make 24 bits for timer2 */
 static PING_DATA *get_data(char);
 static void do_trigger(volatile char *, char);
 
-int debug_1;
-char debug_2;
-
 #pragma disable_warning 59
 
 /******************************************************************************
