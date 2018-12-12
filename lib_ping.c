@@ -175,7 +175,7 @@ __endasm;
  *  in: X has channel data structure (non-standard call)
  */
 
-void isr_chan(PING_DATA *data)
+static void isr_chan(PING_DATA *data)
 {
     data;
 __asm
