@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_bindec.h
  *  Date first: 12/24/2017
- *  Date last:  03/23/2018
+ *  Date last:  12/18/2018
  *
  *  Description: Library of binary/decimal functions for STM8
  *
@@ -36,6 +36,14 @@ void bin8_dec2(char, char *);
  */
 
 char *decimal_rlz(char *, char);
+
+/*
+ *  Combine 16 bit binary to decimal and remove leading zeroes
+ *  in:  16 bit binary, 6 digit buffer
+ *  out: first non-zero digit
+ */
+
+char *bin16_dec_rlz(short, char *);
 
 /*
  *  Convert binary byte to hex, terminate with zero
