@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  10/07/2018
+ *  Date last:  12/31/2018
  *
  *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
@@ -25,12 +25,8 @@
  */
 
 #include "stm8s_header.h"
+#include "lib_delay.h"
 #include "lib_lcd.h"
-
-static void delay_500ns(void);
-static void delay_usecs(char);
-static void delay_50us(void);
-static void delay_ms(unsigned char);
 
 static void lcd_comd(char);
 static void lcd_data(char);
@@ -176,38 +172,3 @@ void lcd_init(void)
     lcd_comd(0x0e);		/* turn on diplay and cursor */
     lcd_comd(0x06);		/* auto increment and move cursor */
 }
-
-void delay_500ns(void)
-{
-    /* call (4) + return (4) == 500 uS */
-}
-void delay_50us(void)
-{
-    delay_usecs(50);
-}
-void delay_usecs(char usecs)
-{
-    usecs;
-__asm
-        ld	a, (3, sp)
-	dec	a
-	clrw	x
-	ld	xl,a
-	sllw	x
-	sllw	x
-00001$:
-        decw	x		; (2)
-	jrne	00001$		; (2)
-__endasm;
-}
-
-void delay_ms(unsigned char wait)
-{
-    while (wait--) {
-	delay_usecs(250);
-	delay_usecs(250);
-	delay_usecs(250);
-	delay_usecs(250);
-    }
-}
-
