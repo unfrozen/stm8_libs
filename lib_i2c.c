@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_i2c.c
  *  Date first: 05/17/2018
- *  Date last:  05/23/2018
+ *  Date last:  01/29/2019
  *
  *  Description: Library for communicating with I2C devices.
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2018, 2019 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -17,23 +17,27 @@
 #include "lib_i2c.h"
 
 /*
- *  I2C pins, PB0=clock, PB1=data
+ *  I2C pins, PD2=clock, PD3=data
+ *  (On STM8S103 board, D3 is next to 5v, for easy pull-up resistor)
  */
 
 #define I2C_CLOCK_DDR	_PD_DDR
 #define I2C_CLOCK_ODR	_PD_ODR
 #define I2C_CLOCK_CR1	_PD_CR1
 #define I2C_CLOCK_CR2	_PD_CR2
-#define I2C_CLOCK_PIN	1
+#define I2C_CLOCK_PIN	2
 
 #define I2C_DATA_DDR	_PD_DDR
 #define I2C_DATA_ODR	_PD_ODR
 #define I2C_DATA_IDR	_PD_IDR
 #define I2C_DATA_CR1	_PD_CR1
 #define I2C_DATA_CR2	_PD_CR2
-#define I2C_DATA_PIN	2
+#define I2C_DATA_PIN	3
 
 static void i2c_rxbit(void);
+
+#warning "I2C clock and data have been moved from D1 and D2 to D2 and D3."
+#warning "Please change code or connections and remove this warning."
 
 /******************************************************************************
  *
@@ -72,10 +76,13 @@ __asm
     sll		(4, sp)
     jrnc	00010$
     call	_i2c_data1
+    call	_i2c_data1
+    call	_i2c_data1
     jra		00020$
 00010$:
     call	_i2c_data0
 00020$:
+    call	_i2c_clock1
     call	_i2c_clock1
     call	_i2c_clock0
 
@@ -173,12 +180,14 @@ void i2c_sendnak(void)
 void i2c_start(void)
 {
     i2c_data0();
+    i2c_data0();
     i2c_clock0();
 }
 
 void i2c_stop(void)
 {
     i2c_data0();
+    i2c_clock1();
     i2c_clock1();
     i2c_data1();
 }
