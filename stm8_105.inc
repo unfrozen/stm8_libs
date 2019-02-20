@@ -56,6 +56,39 @@
 #define	_EXTI_CR1	0x50a0
 #define _EXTI_CR2	0x50a1
 
+#define _TIM1_CR1	0x5250	// TIM1 Control 1
+#define _TIM1_CR2	0x5251	// TIM1 Control 2
+#define _TIM1_SMCR	0x5252	// TIM1 Slave mode control
+#define _TIM1_ETR	0x5253	// TIM1 External trigger
+#define _TIM1_IER	0x5254	// TIM1 Interrupt enable
+#define _TIM1_SR1	0x5255	// TIM1 status 1
+#define _TIM1_SR2	0x5256	// TIM1 status 2
+#define _TIM1_EGR	0x5257	// TIM1 Event generation
+#define _TIM1_CCMR1	0x5258	// TIM1 Capture/compare mode 1
+#define _TIM1_CCMR2	0x5259	// TIM1 Capture/compare mode 2
+#define _TIM1_CCMR3	0x525a	// TIM1 Capture/compare mode 3
+#define _TIM1_CCMR4	0x525b	// TIM1 Capture/compare mode 4
+#define _TIM1_CCER1	0x525c	// TIM1 Capture/compare enable 1
+#define _TIM1_CCER2	0x525d	// TIM1 Capture/compare enable 2
+#define _TIM1_CNTRH	0x525e	// TIM1 Counter high
+#define _TIM1_CNTRL	0x525f	// TIM1 Counter low
+#define _TIM1_PSCRH	0x5260	// TIM1 Prescale high
+#define _TIM1_PSCRL	0x5261	// TIM1 Prescale low
+#define _TIM1_ARRH	0x5262	// TIM1 Auto reload high
+#define _TIM1_ARRL	0x5263	// TIM1 Auto reload low
+#define _TIM1_RCR	0x5264	// TIM1 Repetition counter
+#define _TIM1_CCR1H	0x5265	// TIM1 Capture/compare 1 high
+#define _TIM1_CCR1L	0x5266	// TIM1 Capture/compare 1 low
+#define _TIM1_CCR2H	0x5267	// TIM1 Capture/compare 2 high
+#define _TIM1_CCR2L	0x5268	// TIM1 Capture/compare 2 low
+#define _TIM1_CCR3H	0x5269	// TIM1 Capture/compare 3 high
+#define _TIM1_CCR3L	0x526a	// TIM1 Capture/compare 3 low
+#define _TIM1_CCR4H	0x526b	// TIM1 Capture/compare 4 high
+#define _TIM1_CCR4L	0x526c	// TIM1 Capture/compare 4 low
+#define _TIM1_BKR	0x526d	// TIM1 Break register
+#define _TIM1_DTR	0x526e	// TIM1 Dead time register
+#define _TIM1_OISR	0x526f	// TIM1 Output idle state
+
 #define _TIM2_CR1        0x5300     // TIM2 Control 1
 #define _TIM2_IER        0x5301     // TIM2 Interrupt enable
 #define _TIM2_SR1        0x5302     // TIM2 Status 1

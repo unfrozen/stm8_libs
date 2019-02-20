@@ -104,6 +104,39 @@
 #define SR_OR		(1 << 3)
 #define SR_TXE		(1 << 7)
 
+#define TIM1_CR1	PTR(0x5250)	// TIM1 Control 1
+#define TIM1_CR2	PTR(0x5251)	// TIM1 Control 2
+#define TIM1_SMCR	PTR(0x5252)	// TIM1 Slave mode control
+#define TIM1_ETR	PTR(0x5253)	// TIM1 External trigger
+#define TIM1_IER	PTR(0x5254)	// TIM1 Interrupt enable
+#define TIM1_SR1	PTR(0x5255)	// TIM1 status 1
+#define TIM1_SR2	PTR(0x5256)	// TIM1 status 2
+#define TIM1_EGR	PTR(0x5257)	// TIM1 Event generation
+#define TIM1_CCMR1	PTR(0x5258)	// TIM1 Capture/compare mode 1
+#define TIM1_CCMR2	PTR(0x5259)	// TIM1 Capture/compare mode 2
+#define TIM1_CCMR3	PTR(0x525a)	// TIM1 Capture/compare mode 3
+#define TIM1_CCMR4	PTR(0x525b)	// TIM1 Capture/compare mode 4
+#define TIM1_CCER1	PTR(0x525c)	// TIM1 Capture/compare enable 1
+#define TIM1_CCER2	PTR(0x525d)	// TIM1 Capture/compare enable 2
+#define TIM1_CNTRH	PTR(0x525e)	// TIM1 Counter high
+#define TIM1_CNTRL	PTR(0x525f)	// TIM1 Counter low
+#define TIM1_PSCRH	PTR(0x5260)	// TIM1 Prescale high
+#define TIM1_PSCRL	PTR(0x5261)	// TIM1 Prescale low
+#define TIM1_ARRH	PTR(0x5262)	// TIM1 Auto reload high
+#define TIM1_ARRL	PTR(0x5263)	// TIM1 Auto reload low
+#define TIM1_RCR	PTR(0x5264)	// TIM1 Repetition counter
+#define TIM1_CCR1H	PTR(0x5265)	// TIM1 Capture/compare 1 high
+#define TIM1_CCR1L	PTR(0x5266)	// TIM1 Capture/compare 1 low
+#define TIM1_CCR2H	PTR(0x5267)	// TIM1 Capture/compare 2 high
+#define TIM1_CCR2L	PTR(0x5268)	// TIM1 Capture/compare 2 low
+#define TIM1_CCR3H	PTR(0x5269)	// TIM1 Capture/compare 3 high
+#define TIM1_CCR3L	PTR(0x526a)	// TIM1 Capture/compare 3 low
+#define TIM1_CCR4H	PTR(0x526b)	// TIM1 Capture/compare 4 high
+#define TIM1_CCR4L	PTR(0x526c)	// TIM1 Capture/compare 4 low
+#define TIM1_BKR	PTR(0x526d)	// TIM1 Break register
+#define TIM1_DTR	PTR(0x526e)	// TIM1 Dead time register
+#define TIM1_OISR	PTR(0x526f)	// TIM1 Output idle state
+
 #define TIM2_CR1        PTR(0x5300)     // TIM2 Control 1
 #define TIM2_IER        PTR(0x5301)     // TIM2 Interrupt enable
 #define TIM2_SR1        PTR(0x5302)     // TIM2 Status 1
