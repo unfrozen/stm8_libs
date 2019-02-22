@@ -82,17 +82,17 @@
 
 #define BEEP_CSR	PTR(0x50f3)	// BEEP control
 
-#define UART1_SR	PTR(0x5230)	// UART2 status
-#define UART1_DR	PTR(0x5231)	// UART2 data
-#define UART1_BRR1	PTR(0x5232)	// UART2 baud rate #1
-#define UART1_BRR2	PTR(0x5233)	// UART2 baud rate #2
-#define UART1_CR1	PTR(0x5234)	// UART2 control #1
-#define UART1_CR2	PTR(0x5235)	// UART2 control #2
-#define UART1_CR3	PTR(0x5236)	// UART2 control #3
-#define UART1_CR4	PTR(0x5237)	// UART2 control #4
-#define UART1_CR5	PTR(0x5238)	// UART2 control #5
-#define UART1_GTR	PTR(0x5239)	// UART2 guard time
-#define UART1_PSCR	PTR(0x523a)	// UART2 prescaler
+#define UART1_SR	PTR(0x5230)	// UART1 status
+#define UART1_DR	PTR(0x5231)	// UART1 data
+#define UART1_BRR1	PTR(0x5232)	// UART1 baud rate #1
+#define UART1_BRR2	PTR(0x5233)	// UART1 baud rate #2
+#define UART1_CR1	PTR(0x5234)	// UART1 control #1
+#define UART1_CR2	PTR(0x5235)	// UART1 control #2
+#define UART1_CR3	PTR(0x5236)	// UART1 control #3
+#define UART1_CR4	PTR(0x5237)	// UART1 control #4
+#define UART1_CR5	PTR(0x5238)	// UART1 control #5
+#define UART1_GTR	PTR(0x5239)	// UART1 guard time
+#define UART1_PSCR	PTR(0x523a)	// UART1 prescaler
 
 #define SR_OR		(1 << 3)
 #define SR_TXE		(1 << 7)
