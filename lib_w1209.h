@@ -74,7 +74,7 @@ void w12_relay(char);
 
 /*
  *  Get the current temperature probe value
- *  out: current value, degrees C
+ *  out: current A/D value, -1 if timeout
  */
 
 short w12_probe(void);
