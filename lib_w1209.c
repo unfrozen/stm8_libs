@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_w1209.c
  *  Date first: 01/22/2019
- *  Date last:  02/23/2019
+ *  Date last:  02/24/2019
  *
  *  Description: STM8 Library for W1209 thermostat board.
  *
@@ -402,7 +402,7 @@ const char segs_w12_alpha[21] = {
     SEG_INVALID,	/* Q */
     SEG_INVALID,	/* R */
     0x6d,		/* S shared with 5 */
-    SEG_INVALID,	/* T */
+    0x78,		/* T */
     0x3e		/* U */
 };
 
