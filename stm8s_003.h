@@ -17,6 +17,8 @@
 #define OPT2		PTR(0x4803)     // Alternate function remap 
 #define NOPT2		PTR(0x4804)
 
+#define UNIQUE_ID	PTR(0x4865)	// 12-byte unique id
+
 #define PA_ODR		PTR(0x5000)	// Port A output latch
 #define PA_IDR		PTR(0x5001)	// Port A input status
 #define PA_DDR		PTR(0x5002)	// Port A data direction

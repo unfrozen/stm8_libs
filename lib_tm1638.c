@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_tm1638.c
  *  Date first: 06/08/2018
- *  Date last:  06/24/2018
+ *  Date last:  05/07/2019
  *
  *  Description: STM8 Library for TM1638 LED array and keys.
  *
@@ -367,7 +367,7 @@ const char segs_1638_alpha[21] = {
     0x71,		/* F */
     SEG_INVALID,	/* G */
     0x76,		/* H */
-    SEG_INVALID,	/* I */
+    0x06,		/* I shared with 1 */
     0x0e,		/* J */
     SEG_INVALID,	/* K */
     0x38,		/* L */
@@ -376,7 +376,7 @@ const char segs_1638_alpha[21] = {
     0x5c,		/* O (small o) */
     0x73,		/* P */
     SEG_INVALID,	/* Q */
-    SEG_INVALID,	/* R */
+    0x50,		/* R (small r) */
     0x6d,		/* S shared with 5 */
     SEG_INVALID,	/* T */
     0x3e		/* U */
