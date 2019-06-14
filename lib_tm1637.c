@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_tm1637.c
  *  Date first: 06/08/2018
- *  Date last:  01/30/2019
+ *  Date last:  06/13/2019
  *
  *  Description: STM8 Library for TM1637 4 digit LED array.
  *
@@ -288,18 +288,18 @@ const char segs_1637_alpha[21] = {
     0x71,		/* F */
     SEG_INVALID,	/* G */
     0x76,		/* H */
-    SEG_INVALID,	/* I */
+    0x06,		/* I shared with 1 */
     0x0e,		/* J */
     SEG_INVALID,	/* K */
     0x38,		/* L */
     SEG_INVALID,	/* M */
-    SEG_INVALID,	/* N */
+    0x54,		/* N (small n) */
     0x5c,		/* O (small o) */
     0x73,		/* P */
     SEG_INVALID,	/* Q */
-    SEG_INVALID,	/* R */
+    0x50,		/* R (small r) */
     0x6d,		/* S shared with 5 */
-    SEG_INVALID,	/* T */
+    0x78,		/* T (small t) */
     0x3e		/* U */
 };
 
