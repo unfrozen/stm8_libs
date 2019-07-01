@@ -15,3 +15,7 @@ it can be used by anyone. (I think using inline assembly in main code is a BAD I
 
 This code uses the SDCC compiler. Some of the libraries need to know which CPU you are
 using, so please use -DSTM8103 or -DSTM8105 in the Makefile.
+
+I am available for embedded projects of any size. You can contact me at:
+richard@hodges.org
+
