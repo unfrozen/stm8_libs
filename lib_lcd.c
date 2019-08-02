@@ -107,6 +107,15 @@ void lcd_puts(char *s)
     }
 }
 
+void lcd_clear(void) {
+    // clear
+    lcd_comd(LCD_CLEARDISPLAY);
+}
+
+void lcd_mode(char mode) {
+    lcd_comd(LCD_DISPLAYCONTROL | mode);
+}
+
 /******************************************************************************
  *
  *  Write command byte to lcd
