@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  03/16/2018
+ *  Date last:  06/13/2019
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -435,17 +435,17 @@ const char segs_alpha[21] = {
     0x47,		/* F */
     SEG_INVALID,	/* G */
     0x37,		/* H */
-    SEG_INVALID,	/* I */
+    0x30,		/* I shared with 1 */
     0x38,		/* J */
     SEG_INVALID,	/* K */
     0x0e,		/* L */
     SEG_INVALID,	/* M */
-    SEG_INVALID,	/* N */
+    0x15,		/* N (small n) */
     0x1d,		/* O (small o) */
     0x67,		/* P */
     SEG_INVALID,	/* Q */
-    SEG_INVALID,	/* R */
+    0x05,		/* R (small r) */
     0x5b,		/* S shared with 5 */
-    SEG_INVALID,	/* T */
+    0x0f,		/* T (small t) */
     0x3e		/* U */
 };
