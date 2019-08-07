@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  12/31/2018
+ *  Date last:  08/07/2019
  *
  *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
@@ -172,3 +172,23 @@ void lcd_init(void)
     lcd_comd(0x0e);		/* turn on diplay and cursor */
     lcd_comd(0x06);		/* auto increment and move cursor */
 }
+
+/******************************************************************************
+ *
+ *  Following addition contributed by jackkum <jackkum@bk.ru> August 2019
+ *
+ *  Clear the LCD
+ */
+
+void lcd_clear(void) {
+    lcd_comd(LCD_CLEARDISPLAY);
+}
+
+/*
+ *  Set LCD MODE
+ */
+
+void lcd_mode(char mode) {
+    lcd_comd(LCD_DISPLAYCONTROL | mode);
+}
+
