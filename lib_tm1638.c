@@ -53,10 +53,10 @@ static void key_read(void);	/* read keys and build key_status */
 static void key_map8(char *);
 static void key_map16(char *);
 
-const char segs_1638_digits[];
-const char segs_1638_alpha[];
+static const char segs_1638_digits[];
+static const char segs_1638_alpha[];
 
-const  char  kb_default[] = "0123456789ABCDEF";
+static const  char  kb_default[] = "0123456789ABCDEF";
 static char *kb_current;
 
 static int  key_status;		/* current state of all 8 or 16 keys */
@@ -353,12 +353,12 @@ __endasm;
  *	 ddd  h		 333  7
  */
 
-const char segs_1638_digits[16] = {
+static const char segs_1638_digits[16] = {
     0x3f, 0x06, 0x5b, 0x4f, 0x66,	/* 0 - 4 */
     0x6d, 0x7d, 0x07, 0x7f, 0x67,	/* 5 - 9 */
     SEG_INVALID, SEG_INVALID, SEG_INVALID, 0x48, SEG_INVALID, SEG_INVALID
 };
-const char segs_1638_alpha[21] = {
+static const char segs_1638_alpha[21] = {
     0x77,		/* A */
     0x7c,		/* B */
     0x39,		/* C */
