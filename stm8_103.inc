@@ -56,6 +56,15 @@
 #define	_EXTI_CR1	0x50a0
 #define _EXTI_CR2	0x50a1
 
+#define _SPI_CR1	0x5200	// SPI control #1
+#define _SPI_CR2	0x5201	// SPI control #2
+#define _SPI_ICR	0x5202	// SPI interrupt control
+#define _SPI_SR		0x5203	// SPI status
+#define _SPI_DR		0x5204	// SPI data R/W
+#define _SPI_CRCPR	0x5205	// SPI CRC polynomial
+#define _SPI_RXCRCR	0x5206	// SPI RX CRC
+#define _SPI_TXCRCR	0x5207	// SPI TX CRC
+
 #define _TIM1_CR1	0x5250	// TIM1 Control 1
 #define _TIM1_CR2	0x5251	// TIM1 Control 2
 #define _TIM1_SMCR	0x5252	// TIM1 Slave mode control

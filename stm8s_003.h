@@ -82,6 +82,15 @@
 
 #define BEEP_CSR	PTR(0x50f3)	// BEEP control
 
+#define SPI_CR1		PTR(0x5200)	// SPI control #1
+#define SPI_CR2		PTR(0x5201)	// SPI control #2
+#define SPI_ICR		PTR(0x5202)	// SPI interrupt control
+#define SPI_SR		PTR(0x5203)	// SPI status
+#define SPI_DR		PTR(0x5204)	// SPI data R/W
+#define SPI_CRCPR	PTR(0x5205)	// SPI CRC polynomial
+#define SPI_RXCRCR	PTR(0x5206)	// SPI RX CRC
+#define SPI_TXCRCR	PTR(0x5207)	// SPI TX CRC
+
 #define UART1_SR	PTR(0x5230)	// UART1 status
 #define UART1_DR	PTR(0x5231)	// UART1 data
 #define UART1_BRR1	PTR(0x5232)	// UART1 baud rate #1
