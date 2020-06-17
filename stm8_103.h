@@ -91,6 +91,15 @@
 #define SPI_RXCRCR	PTR(0x5206)	// SPI RX CRC
 #define SPI_TXCRCR	PTR(0x5207)	// SPI TX CRC
 
+#define SPI_CR1_SPE	0x40		// SPI enable
+#define SPI_CR2_BDM	0x80		// Bidirectional (one data wire for read and write)
+#define SPI_CR2_BDOE	0x40		// Bidirectional output enable (transmitting)
+#define SPI_ICR_TXIE	0x80		// TX interrupt enable
+#define SPI_ICR_RXIE	0x40		// RX interrupt enable
+#define SPI_SR_BSY	0x80		// Busy
+#define SPI_SR_TXE	0x02		// TX buffer empty
+#define SPI_SR_RXNE	0x01		// RX buffer not empty
+
 #define UART1_SR	PTR(0x5230)	// UART1 status
 #define UART1_DR	PTR(0x5231)	// UART1 data
 #define UART1_BRR1	PTR(0x5232)	// UART1 baud rate #1
