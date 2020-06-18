@@ -1,22 +1,29 @@
 /*
  *  File name:  lib_clock.h
  *  Date first: 03/23/2018
- *  Date last:  04/14/2018
+ *  Date last:  06/17/2020
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2018-2020 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
  *
+ *  Option to extend clock to handle calendar date
+ *  Comment out to save code and memory.
+ */
+
+#define CLOCK_CALENDAR
+
+/*
  * Initialize the clock (set up timer 4)
  * in: Millisecond callback
  */
 
-void clock_init(void (*void )(void), void (*void)(void));
+void clock_init(void (* )(void), void (*)(void));
 
 /*
  * Get string for current clock
@@ -55,3 +62,17 @@ void clock_trim(signed char, signed char);
 
 void timer4_isr(void) __interrupt (IRQ_TIM4);
 
+#ifdef CLOCK_CALENDAR
+typedef struct {
+    int		year;		/* 2000-2199 */
+    char	month;		/* 1-12 */
+    char	date;		/* 1-31 */
+    char	day;		/* 1-7 */
+} CLOCK_CAL;
+
+void clock_cal_get(CLOCK_CAL *);
+void clock_cal_set(CLOCK_CAL *);
+ 
+void clock_inc_calendar(void);	/* advance calendar date, for testing */
+
+#endif	/* CLOCK_CALENDAR */

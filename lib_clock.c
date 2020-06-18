@@ -30,6 +30,10 @@ static signed char trim_second;	/* small trim every second */
 
 static volatile char clock_lock;	/* lock to update clock */
 
+#ifdef CLOCK_CALENDAR
+static CLOCK_CAL calendar;
+#endif
+
 static void (*timer_ms)(void);
 static void (*timer_10)(void);
 
@@ -201,4 +205,80 @@ void timer4_isr(void) __interrupt (IRQ_TIM4)
 	return;
     clock_hours = 0;
     clock_days++;
+    
+#ifdef CLOCK_CALENDAR
+    clock_inc_calendar();
+#endif
 }
+
+#ifdef CLOCK_CALENDAR
+
+static const char days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+/******************************************************************************
+ *
+ *  Advance calendar one day
+ */
+
+void clock_inc_calendar(void)
+{
+    char	mdays;
+    
+    calendar.day++;
+    if (calendar.day > 7)
+	calendar.day = 1;
+
+    mdays = days[calendar.month - 1];
+    if (calendar.month == 2 &&
+	(calendar.year & 3) == 0)
+	mdays++;
+    calendar.date++;
+    if (calendar.date <= mdays)
+	return;
+    calendar.date = 1;
+
+    calendar.month++;
+    if (calendar.month < 13)
+	return;
+    calendar.month = 1;
+
+    calendar.year++;
+}
+
+/* NOTE: This function will normally be called from the timer interrupt, and
+ * will be protected by "clock_lock". During testing, this may also be called
+ * from user space and that code will need to avoid possible race condition.
+ *
+ ******************************************************************************
+ *
+ *  Get calendar data
+ *  in: calendar structure
+ */
+
+void clock_cal_get(CLOCK_CAL *cal)
+{
+    clock_lock = 1;
+    cal->year  = calendar.year;
+    cal->month = calendar.month;
+    cal->date  = calendar.date;
+    cal->day   = calendar.day;
+    clock_lock = 0;
+}
+
+/******************************************************************************
+ *
+ *  Set calendar data
+ *  in: calendar structure
+ */
+
+void clock_cal_set(CLOCK_CAL *cal)
+{
+    clock_lock = 1;
+    calendar.year  = cal->year;
+    calendar.month = cal->month;
+    calendar.date  = cal->date;
+    calendar.day   = cal->day;
+    clock_lock = 0;
+}
+
+#endif	/* CLOCK_CALENDAR */
