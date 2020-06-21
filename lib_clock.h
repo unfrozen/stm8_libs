@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.h
  *  Date first: 03/23/2018
- *  Date last:  06/17/2020
+ *  Date last:  06/22/2020
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -23,7 +23,7 @@
  * in: Millisecond callback
  */
 
-void clock_init(void (* )(void), void (*)(void));
+void clock_init(void (*)(void), void (*)(void));
 
 /*
  * Get string for current clock
@@ -62,6 +62,9 @@ void clock_trim(signed char, signed char);
 
 void timer4_isr(void) __interrupt (IRQ_TIM4);
 
+/*
+ *  OPTIONAL CALENDAR FUNCTIONS
+ */
 #ifdef CLOCK_CALENDAR
 typedef struct {
     int		year;		/* 2000-2199 */
@@ -70,9 +73,15 @@ typedef struct {
     char	day;		/* 1-7 */
 } CLOCK_CAL;
 
+/*
+ *  Get or set current year, month, date, day of week
+ */
 void clock_cal_get(CLOCK_CAL *);
 void clock_cal_set(CLOCK_CAL *);
- 
-void clock_inc_calendar(void);	/* advance calendar date, for testing */
+
+/*
+ *  Advance the calendar date (for testing calendar function)
+ */
+void clock_inc_calendar(void);
 
 #endif	/* CLOCK_CALENDAR */
