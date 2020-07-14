@@ -94,6 +94,7 @@
 #define SPI_CR1_SPE	0x40		// SPI enable
 #define SPI_CR2_BDM	0x80		// Bidirectional (one data wire for read and write)
 #define SPI_CR2_BDOE	0x40		// Bidirectional output enable (transmitting)
+#define SPI_CR2_RXONLY	0x04		// Enable SPI clock for receiving
 #define SPI_ICR_TXIE	0x80		// TX interrupt enable
 #define SPI_ICR_RXIE	0x40		// RX interrupt enable
 #define SPI_SR_BSY	0x80		// Busy
