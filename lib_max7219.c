@@ -1,21 +1,21 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  06/13/2019
+ *  Date last:  07/14/2020
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2018, 2020 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
+ *
  *
  ******************************************************************************
  *
  */
 
-#include "stm8_103.h"		/* C defines */
-#include "stm8_103.inc"		/* asm defines */
+#include "stm8s_header.h"
 #include "lib_max7219.h"
 #include "lib_max7219.font"
 
@@ -39,6 +39,7 @@ static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 static char opt_wrap;		/* wrap around to first row? */
 static char opt_marquee;	/* begin marquee */
 
+static void emit_all(int);	/* issue command to all units */
 static void emit_word(int);	/* issue command word and load */
 static void emit_part(int);	/* not last word */
 static void emit_load(void);	/* issue load command */
@@ -67,8 +68,6 @@ static char graph_pixel;
 
 void m7219_init(char type, char count)
 {
-    char	i;
-
     PORT_ODR &= 0xf1;		/* start pins low */
     PORT_DDR |= 0x0e;		/* D1, D2, D3 outputs */
     PORT_CR1 |= 0x0e;		/* enable source output */
@@ -80,13 +79,10 @@ void m7219_init(char type, char count)
     opt_wrap = 1;
     opt_marquee = 0;
 
-    emit_word(0x0900);		/* no BCD decode for any digits */
-    emit_word(0x0b07);		/* scan all digits */
+    emit_all(0x0900);		/* no BCD decode for any digits */
+    emit_all(0x0b07);		/* scan all digits */
     m7219_bright(6);		/* brightness */
-    emit_word(0x0c01);		/* normal operation */
-
-    for (i = 1; i < count; i++)
-	emit_word(0);		/* nop to push setup commands to all */
+    emit_all(0x0c01);		/* normal operation */
 
     m7219_clear();
 #if (MAX7219_DOT) || (MAX7219_GRAPH)
@@ -340,7 +336,21 @@ void m7219_clear(void)
 
 void m7219_bright(char intensity)
 {
-    emit_word(0x0a00 | intensity);
+    emit_all(0x0a00 | intensity);
+}
+
+/******************************************************************************
+ *
+ *  Send command to all controllers
+ */
+
+static void emit_all(int w)
+{
+    int		i;
+
+    for (i = 0; i < led_count; i++)
+	emit_part(w);
+    emit_load();
 }
 
 /******************************************************************************
