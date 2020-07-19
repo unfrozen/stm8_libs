@@ -139,10 +139,8 @@ void spi_isr(void) __interrupt (IRQ_SPI) __naked
 {
     // irq_current();
 __asm
-    bset	_PA_ODR, #2
     ldw		x, _irq_current
     call	(x)
-    bres	_PA_ODR, #2
     iret
 __endasm;
 }
