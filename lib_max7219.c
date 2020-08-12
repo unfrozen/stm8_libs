@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  07/14/2020
+ *  Date last:  08/12/2020
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -257,7 +257,8 @@ static void send_grcol(char dots)
     graph_pixel <<= 1;
     led_col++;
     if (led_col & 8) {
-	send_graph();
+	if (!opt_marquee)
+	    send_graph();
 	graph_pixel = 1;
 	led_col = 0;
 	led_row++;
