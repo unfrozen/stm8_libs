@@ -13,8 +13,8 @@
 #define IRQ_EXTI2	5	/* 0x801c PORT C external interrupts */
 #define IRQ_EXTI3	6	/* 0x8020 PORT D external interrupts */
 #define IRQ_EXTI4	7	/* 0x8024 PORT E external interrupts */
-#define IRQ_res8	8	/* 0x8028 reserved */
-#define IRQ_res9	9	/* 0x802c reserved */
+#define IRQ_CANRX	8	/* 0x8028 beCAN RX */
+#define IRQ_CANTX	9	/* 0x802c beCAN TX */
 #define IRQ_SPI		10	/* 0x8030 End of transfer */
 #define IRQ_TIM1	11	/* 0x8034 TIM1 update/over/underflow/trigger */
 #define IRQ_TIM1C	12	/* 0x8038 TIM1 capture/compare */
