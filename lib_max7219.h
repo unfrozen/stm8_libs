@@ -71,3 +71,26 @@ void m7219_option(char);
 #define MAX7219_WRAP	1	/* wrap around to first row & column */
 #define MAX7219_NOWRAP	2	/* don't wrap, ignore extra data */
 #define MAX7219_MARQUEE	3	/* begin marquee: don't show until wrap */
+
+#define MAX7219_PRERENDER	/* Render into pixel buffer. */
+
+#ifdef MAX7219_PRERENDER
+/*
+ *  Pre-render text into a raw pixel buffer instead of sending to the
+ *  displays. This will make sending the pixels much faster. The buffer size
+ *  is 8 bytes for every MAX7219 device (the 8x32 module has 4). The "skip"
+ *  count  is the number of left pixels to omit from the first character.
+ *  This is for making a moving marquee.
+ *
+ *  in:  pixel buffer, pixels to skip
+ */
+void m7219_prerender(char *, char);
+
+/*
+ *  Send pre-rendered pixel buffer to displays.
+ *
+ *  in: pixel buffer
+ */
+void m7219_sendbuf(char *);
+
+#endif /* MAX7219_PRERENDER */

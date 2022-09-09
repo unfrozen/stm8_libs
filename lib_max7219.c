@@ -38,6 +38,7 @@ static char led_col;		/* digit (7-seg) or dot column, always 0-7 */
 
 static char opt_wrap;		/* wrap around to first row? */
 static char opt_marquee;	/* begin marquee */
+static char opt_prerender;	/* Render into buffer instead of display */
 
 static void emit_all(int);	/* issue command to all units */
 static void emit_word(int);	/* issue command word and load */
@@ -58,6 +59,8 @@ static void zero_cache(void);	/* clear the graphics cache */
 
 static char graph_cache[8];
 static char graph_pixel;
+
+static char *renderbuf;		/* Pre-render buffer */
 #endif
 
 /******************************************************************************
@@ -279,10 +282,16 @@ static void send_grcol(char dots)
 static void send_graph(void)
 {
     char	 row, i;
-    char	*cache;
+    char	*cache, *pre;
     int		 digit;
 
     cache = graph_cache;
+    if (opt_prerender) {
+	pre = renderbuf + 8 * led_row;
+	for (row = 1; row <= 8; row++)
+	    *pre++ = *cache++;
+	return;
+    }
     for (row = 1; row <= 8; row++) {
 	digit = *cache++;
 	digit |= row << 8;
@@ -314,6 +323,56 @@ __asm
     clr		(7, x)
 __endasm;
 }
+
+#ifdef MAX7219_PRERENDER
+/******************************************************************************
+ *
+ *  Pre-render text into raw pixel buffer.
+ *
+ *  in: pixel buffer, pixels to skip
+ */
+
+void m7219_prerender(char *pixbuf, char skip)
+{
+    renderbuf = pixbuf;
+
+    if (skip)	/* Skip pixels, then wrap around. */
+	m7219_curs(led_count - 1, 8 - skip);
+    else
+	m7219_curs(0, 0);
+    opt_prerender = 1;
+}
+
+/******************************************************************************
+ *
+ *  Send pre-rendered pixel buffer to displays.
+ *
+ *  in: pixel buffer
+ */
+
+void m7219_sendbuf(char *pixbuf)
+{
+    unsigned char i, *ptr;
+    int		row, command;
+    int		bufsize;
+    
+    bufsize = 8 * led_count;
+    ptr = pixbuf + bufsize;
+    ptr--;		/* Start with last LED module. */
+
+    for (row = 0x800; row >= 0x100; row -= 0x100) {
+	for (i = 0; i < led_count; i++) {
+	    command  = row;
+	    command |= *ptr;	/* Command is row# and data */
+	    emit_part(command);
+	    ptr -= 8;		/* Previous LED module */
+	}
+	emit_load();
+	ptr += bufsize - 1;	/* Go to last LED and next row */
+    }
+}
+
+#endif /* MAX7219_PRERENDER */
 
 #endif	/* (MAX7219_DOT) || (MAX7219_GRAPH) */
 /******************************************************************************
@@ -418,7 +477,6 @@ void m7219_option(char opt)
 	opt_marquee = 1;
 	break;
     }
-
 }
 
 /******************************************************************************
