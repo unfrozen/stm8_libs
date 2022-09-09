@@ -24,3 +24,13 @@
 
 #include "vectors.h"
 
+/*
+ *  Choose syntax for inline assembly.
+ */
+#ifdef __SDCC
+#define __ASM __asm
+#define __ENDASM __endasm;
+#else
+#define __ASM #asm		/* Cosmic syntax */
+#define __ENDASM #endasm
+#endif
