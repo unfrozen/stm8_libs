@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_tm1638.c
  *  Date first: 06/08/2018
- *  Date last:  06/13/2019
+ *  Date last:  09/12/2022
  *
  *  Description: STM8 Library for TM1638 LED array and keys.
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2018, 2022 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *  Some code copied from lib_max7219.c
  *
@@ -329,7 +329,9 @@ static void emit_byte(char b)
 {
     b;
 __asm
+#if __SDCCCALL == 0
     ld		a, (3, sp)
+#endif
     push	#8
 00001$:
     rrc		a
@@ -596,7 +598,9 @@ void key_map8(char *vals)
 {
     vals;
 __asm
+#if __SDCCCALL == 0
     ldw		x, (3, sp)
+#endif
     ldw		y, #_key_status+1
     srl		(x)
     rrc		(y)
@@ -640,7 +644,9 @@ void key_map16(char *vals)
 {
     vals;
 __asm
+#if __SDCCCALL == 0
     ldw		x, (3, sp)
+#endif
     sub		sp, #5
 
     sll		(x)

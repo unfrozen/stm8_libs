@@ -16,8 +16,7 @@
  * save the current clock as timestamps.
  */
 
-#include "stm8_103.h"
-#include "stm8_103.inc"
+#include "stm8s_header.h"
 
 #include "lib_log.h"
 #include "lib_clock.h"
