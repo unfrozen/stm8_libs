@@ -34,3 +34,12 @@
 #define __ASM #asm		/* Cosmic syntax */
 #define __ENDASM #endasm
 #endif
+
+/*
+ *  Make sure __SDCCCALL is defined so inline assembly can handle
+ *  all versions of the calling convention version.
+ */
+#ifndef __SDCCCALL
+#define __SDCCCALL 0
+#endif
+
