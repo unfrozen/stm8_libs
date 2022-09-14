@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_bindec.c
  *  Date first: 12/22/2017
- *  Date last:  12/18/2018
+ *  Date last:  09/13/2022
  *
  *  Description: Library of binary/decimal functions for STM8
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018, 2022 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -33,7 +33,9 @@ void bin16_dec(short bin, char *dec)
 
 #ifdef __SDCC
 __asm
+#if __SDCCCALL == 0
     ldw		x, (3, sp)
+#endif
 #endif
 #ifdef COSMIC
 #asm		/* binary provided in X */
@@ -70,7 +72,11 @@ __asm
     ld		a, yl
     add		a, #'0'
 #ifdef __SDCC
+#if __SDCCCALL == 0
     ldw		x, (9, sp)	/* decimal buffer */
+#else
+    ldw		x, (7, sp)
+#endif
 #endif
 #ifdef COSMIC
     ldw		x, (10, sp)
@@ -305,9 +311,13 @@ void bin8_dec2(char bin, char *dec)
 {
     bin, dec;
 __asm
-    clrw	x
+#if __SDCCCALL == 0
     ld		a, (3, sp)
     ldw		y, (4, sp)
+#else
+    ldw		y, x
+#endif
+    clrw	x
     ld		xl, a
 
     ld		a, #100
@@ -337,8 +347,12 @@ void bin8_hex(char val, char *hex)
 #ifdef __SDCC
     val, hex;
 __asm
+#if __SDCCCALL == 0
     ldw		x, (4, sp)
     ld		a, (3, sp)
+#else
+    push	a
+#endif
     swap	a
     and		a, #0x0f
     add		a, #6
@@ -347,8 +361,11 @@ __asm
 00001$:
     add		a, #'0'+1
     ld		(x), a
-
+#if __SDCCCALL == 0
     ld		a, (3, sp)
+#else
+    pop		a
+#endif
     and		a, #0x0f
     add		a, #6
     jrh		00002$
@@ -384,7 +401,11 @@ int dec_bin16(char *dec)
 {
     dec;
 __asm
+#if __SDCCCALL == 0
     ldw		y, (3, sp)
+#else
+    ldw		y, x
+#endif
     clrw	x
     pushw	x
 00001$:
