@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  08/12/2020
+ *  Date last:  09/09/2022
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -433,7 +433,9 @@ static void emit_part(int w)
 {
     w;
 __asm
+#if __SDCCCALL == 0
     ldw		x, (3, sp)
+#endif
     push	#16
 00001$:
     rlcw	x
