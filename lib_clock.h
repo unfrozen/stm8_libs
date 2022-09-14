@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_clock.h
  *  Date first: 03/23/2018
- *  Date last:  06/22/2020
+ *  Date last:  08/16/2020
  *
  *  Description: Library for maintaining a wall clock using timer 4
  *
@@ -54,11 +54,6 @@ void clock_bin_set(char *);
  */
 
 void clock_trim(signed char, signed char);
-
-/*
- *  Interrupt service routine declaration
- */
-#include "vectors.h"
 
 void timer4_isr(void) __interrupt (IRQ_TIM4);
 
