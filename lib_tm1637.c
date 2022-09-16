@@ -324,7 +324,11 @@ void emit_byte(char bits)
 __asm
     push	#8
 00001$:
+#if __SDCCCALL == 0
     srl		(4, sp)
+#else
+    srl		a
+#endif
     jrnc	00010$
     call	_i2c_data1
     call	_i2c_data1
