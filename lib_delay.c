@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_delay.h
  *  Date first: 12/19/2017
- *  Date last:  11/05/2018
+ *  Date last:  09/16/2022
  *
  *  Description: STM8 Library for short delays.
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2018, 2022 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  *  Code copied out of lib_lcd.c
@@ -30,7 +30,9 @@ void delay_usecs(char usecs)
 {
     usecs;
 __asm
+#if __SDCCCALL == 0
         ld      a, (3, sp)
+#endif
         dec     a
         clrw    x
         ld      xl,a
