@@ -23,6 +23,7 @@
  *
  *  Board frequency override may be added later.
  *  Default is 16mhz internal for stm8s103 and 8mhz external xtal for stm8s105.
+ *  SQU board for CAN uses the 16mhz crystal.
  */
 
 void board_init(char freq)
@@ -45,7 +46,15 @@ void board_init(char freq)
     PE_DDR = 0x20;	/* output LED */
     PE_CR1 = 0x20;
 #endif
-    __asm__ ("rim");
+#ifdef STM8S207
+    CLK_CKDIVR = 0x00;  /* no clock divisor */
+    CLK_ECKR = 1;       /* enable crystal oscillator */
+    CLK_SWCR = 2;       /* enable clock switch */
+    CLK_SWR = 0xb4;     /* HSE is master (16 mhz crystal) */
+#endif
+__ASM
+    rim
+__ENDASM
 }
 
 /* Available ports on STM8S103P3:
@@ -84,6 +93,13 @@ void board_led(char on)
         PE_ODR &= 0xdf;
     else
         PE_ODR |= 0x20;
+#endif
+#ifdef STM8S207
+    if (on)
+	PD_ODR |= 0x80;
+    else
+	PD_ODR &= 0x7f;
+
 #endif
 }
 
