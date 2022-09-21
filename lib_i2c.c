@@ -73,7 +73,11 @@ void i2c_txbit8(char bits)
 __asm
     push	#8
 00001$:
+#if __SDCCCALL == 0
     sll		(4, sp)
+#else
+    sll		a
+#endif
     jrnc	00010$
     call	_i2c_data1
     call	_i2c_data1
