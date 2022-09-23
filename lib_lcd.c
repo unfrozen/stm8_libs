@@ -1,13 +1,13 @@
 /*
  *  File name:  lib_lcd.c
  *  Date first: 12/19/2017
- *  Date last:  08/07/2019
+ *  Date last:  09/22/2022
  *
  *  Description: Library for Hitachi HD44780 LCDs on STM8 architecture.
  *
  *  Author:     Richard Hodges
  *
- *  Copyright (C) 2017, 2018 Richard Hodges. All rights reserved.
+ *  Copyright (C) 2017, 2018, 2022 Richard Hodges. All rights reserved.
  *  Permission is hereby granted for any use.
  *
  ******************************************************************************
@@ -44,7 +44,7 @@ static void lcd_nybble(char);
 #define BUSY_COUNT	50	/* crystal oscillator at 8 mhz */
 #endif
 
-char	busy_count = BUSY_COUNT;	/* 100 uSecs */
+//char	busy_count = BUSY_COUNT;	/* 100 uSecs */
 
 /******************************************************************************
  *
@@ -55,6 +55,7 @@ char	busy_count = BUSY_COUNT;	/* 100 uSecs */
 
 void lcd_curs(char line, char col)
 {
+#if __SDCCCALL == 0
     char	val;
 
     val = col;
@@ -63,6 +64,25 @@ void lcd_curs(char line, char col)
     if (line & 2)
 	val += 20;		/* lines 2 & 3 have 20 offset */
     lcd_comd(val | 0x80);
+#else	/* Inline assembly due to bug in early SDCC 4.2 */
+    line, col;
+    /* line will be in A register, col at (3, sp) */
+__asm
+    bcp         a, #1
+    jreq        00010$
+    add         a, #0x40
+00010$:
+    bcp         a, #2
+    jreq        00011$
+    add         a, #20
+00011$:
+    and         a, #0xfc
+    add         a, (3, sp)
+    or          a, #0x80
+    call        _lcd_comd
+__endasm;
+#endif
+
 }
 
 /******************************************************************************
@@ -75,26 +95,30 @@ void lcd_putc(char val)
     val;
 __asm
     bset	RS_PORT, #RS_PIN
-    push	_busy_count
-
-    ld		a, (4, sp)
+#if __SDCCCALL == 0
+    ld		a, (3, sp)
+#else
+    push	a
+#endif
     and		a, #0xf0
     ld		_PC_ODR, a
     bset	_PC_ODR, #3
     call	_delay_500ns
     bres	_PC_ODR, #3
 
-    ld		a, (4, sp)
+#if __SDCCCALL == 0
+    ld		a, (3, sp)
+#else
+    pop		a
+#endif
     swap	a
     and		a, #0xf0
     ld		_PC_ODR, a
     bset	_PC_ODR, #3
     call	_delay_500ns
     bres	_PC_ODR, #3
-
-    call	_delay_usecs
-    pop		a
 __endasm;
+    delay_usecs(BUSY_COUNT);
 }
 
 void lcd_puts(char *s)
@@ -122,6 +146,7 @@ void lcd_comd(char val)
 /******************************************************************************
  *
  *  Write command nybble to lcd
+ *  in: nybble is high 4 bits
  */
 
 void lcd_nybble(char val)
@@ -129,7 +154,9 @@ void lcd_nybble(char val)
     val;
 __asm
     bres	RS_PORT, #RS_PIN
+#if __SDCCCALL == 0
     ld		a, (3, sp)
+#endif
     and		a, #0xf0
     ld		_PC_ODR, a
     call	_delay_500ns
