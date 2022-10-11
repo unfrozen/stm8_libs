@@ -1,4 +1,4 @@
-CC   = gcc -Wall -O2
+CC   = cc -Wall -O2
 SDCC = sdcc -mstm8 -DSTM8103
 SDAR = sdar
 NAME = lib_stm8
@@ -20,5 +20,15 @@ $(NAME).lib: $(OBJS)
 	$(SDCC) -c $<
 
 clean:
-	- rm -f *.adb *.asm *.cdb *.ihx *.lk *.lst *.map *.rel *.rst *.sym
+	- rm -f *.adb *.asm *.cdb *.ihx *.lk *.lst *.map *.rel *.rst *.sym \
+	aes_tables aes_tables.h
+
+aes_stm8.rel: aes_stm8.c aes_tables.h
+	$(SDCC) -c aes_stm8.c
+
+aes_tables: aes_tables.c
+	$(CC) -o aes_tables aes_tables.c
+
+aes_tables.h: aes_tables
+	./aes_tables > aes_tables.h
 
