@@ -7,7 +7,7 @@ OBJS = lib_bindec.rel lib_rotary.rel lib_uart.rel lib_lcd.rel\
 	lib_clock.rel lib_log.rel lib_i2c.rel lib_m9800.rel lib_tm1638.rel \
 	lib_pwm.rel lib_eeprom.rel lib_adc.rel lib_keypad.rel lib_flash.rel \
 	lib_delay.rel lib_ping.rel lib_tm1637.rel lib_w1209.rel \
-	lib_board.rel lib_spi.rel
+	lib_board.rel lib_spi.rel lib_tim4.rel
 
 .SUFFIXES : .rel .c
 
