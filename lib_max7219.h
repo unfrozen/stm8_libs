@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.h
  *  Date first: 02/27/2018
- *  Date last:  03/16/2018
+ *  Date last:  12/13/2022
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -40,7 +40,7 @@ void m7219_putc(char);
  *  in: string (Note: for graphics, zero is valid, so use m7219_putc() instead)
  */
 
-void m7219_puts(char *);
+void m7219_puts(const char *);
 
 /*
  *  Set cursor position

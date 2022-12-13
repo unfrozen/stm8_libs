@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_max7219.c
  *  Date first: 02/27/2018
- *  Date last:  09/09/2022
+ *  Date last:  12/13/2022
  *
  *  Description: STM8 Library for MAX7219 LED array.
  *
@@ -116,7 +116,7 @@ void m7219_curs(char line, char col)
  *  in: number/string
  */
 
-void m7219_puts(char *str)
+void m7219_puts(const char *str)
 {
     char	c;
     while (c = *str++) {

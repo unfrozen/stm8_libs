@@ -1,7 +1,7 @@
 /*
  *  File name:  lib_uart.c
  *  Date first: 12/30/2017
- *  Date last:  10/08/2018
+ *  Date last:  12/13/2022
  *
  *  Description: STM8 Library for UART1 and UART2
  *
@@ -108,7 +108,7 @@ void uart_put(char byte)
  *  Send string
  *  in: character string, terminated with binary 00
  */
-void uart_puts(char *str)
+void uart_puts(const char *str)
 {
     while (*str)
 	uart_put(*str++);
